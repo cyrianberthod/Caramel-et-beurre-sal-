@@ -6,9 +6,22 @@ import matplotlib as plt
 #------------------------------------------------Matrice-------------------------------------------------------------------------------
 ##initialiation
 def plateau():
-  P=np.zeros(5,5)
+  P=np.zeros((5,5))
   return P
 
+def capture_cube(joueur,clic):
+    P=plateau()
+    l,c=clic
+    positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
+    for position in coord_bordure:#lp=ligne du doublet dans position cp=colonne du doublet dans position
+        lp,cp=position
+        if P[lp,cp]==0 or P([lp,cp])==joueur:
+             positions_possibles.append((l,c))
+    if (l,c) in positions_possibles: #verifie que  la position est la valide
+        P[l,c]=-1 #on enlève le cube, -1=case vide
+        print(P)
+        return (True,(l,c))
+    return False
 
 
 ## Pousse de la ligne ou de la colonne
