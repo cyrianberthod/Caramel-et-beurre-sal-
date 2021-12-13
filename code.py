@@ -26,8 +26,8 @@ def capture_cube(joueur,clic):
 ##Peut-on pousser ici ?
 def poussepossible(l,c): #renvoie liste des coorconnées des posi° où on peut pousser
     A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
-    if (l,c)==k in A: #si le pion a été pris dans un angle
-      return [(abs(l-4),c),(l,abs(4-c))]
+    if (l,c) in A: #si le pion a été pris dans un angle
+      return [(abs(l-4),c),(l,abs(4-c))]#on fixe l ou c , on determine les endroits ou on peut pousser par la relation avec abs() (faire dessin)
     L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle 4 posibilité
     for k in range(4):
         if L[k]==(l,c):
