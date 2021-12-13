@@ -1,6 +1,10 @@
 Séance 1: 13/12/2021
-règles du jeu:
-    Saisit un cube neutre en périphérie du plateau qui porte sa marque ou un cube neutre.
-    À l'aide du cube choisi, il pousse une rangée de cube, de façon à combler l'espace laissé par le cube.
-    Lorsque 5 marques sont alignées (en rangée ou en diagonale), la partie est remportée par le ou les joueurs jouant cette marque.
-    
+Grandes fonctions à coder:
+-initialisation du plateau 0=vide 1= rond 2=croix
+-où est ce que le joueur peut jouer: vide ou propre pion en bordure
+-différents choix pour le joueur suite au cube choisi
+au bout sur ligne ou colonne 
+-fonction qui modifie le plateau suite au choix fait par le joueur
+-fonction qui determine quand la partie est finie (ligne colonne ou diagonale)
+-intelligence artificielle etc...
+
