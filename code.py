@@ -23,6 +23,24 @@ def capture_cube(joueur,clic):
         return (True,(l,c))
     return False
 
+##Peut-on pousser ici ?
+def poussepossible(l,c): #renvoie liste des coorconnées des posi° où on peut pousser
+    A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
+    for k in A:
+        if (l,c)==k: #si le pion a été pris dans un angle
+            return [(abs(l-4),c),(l,abs(4-c))]
+    L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle 4 posibilité
+    for k in range(4):
+        if L[k]==(l,c):
+            del L[k]     #on ne peut pas laisser le pion où on l'a pris
+            return L
+
+def pousseok(l,c,pl,pc): #(pl,pc) coordonnées de là où on veut pousser
+    Lpos=poussepossible(l,c) #liste des positions de pousse possibles
+    for k in Lpos:
+        if (pl,pc)==k:  #l'endroit où le joueur veut poser est dans Lposs => c ok
+            return True
+    return False
 
 ## Pousse de la ligne ou de la colonne
 def pousse(clic):
