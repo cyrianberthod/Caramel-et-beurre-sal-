@@ -70,3 +70,22 @@ def pousse(clic):
  
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
+
+fig = plt.figure()
+ax = plt.axes(aspect=1)
+plt.xlim(-0.1,0.6)
+plt.ylim(-0.1,0.6)
+plt.axis('off')
+plt.title('QUIXO')
+contour = plt.Rectangle((-0.1,-0.1),0.7,0.7,fc=(0.8,0.8,0.8))
+ax.add_patch(contour)
+fond = plt.Rectangle((0,0),0.5,0.5, fc=(0.4,0.25,0.2))
+ax.add_patch(fond)
+for k in range (0,4): #grille
+    h=k/10+0.0975
+    lignev = plt.Rectangle((h,0),0.005,0.5,fc="black")
+    ligneh = plt.Rectangle((0,h),0.5,0.005,fc="black")
+    ax.add_patch(lignev)
+    ax.add_patch(ligneh)
+
+plt.show()
