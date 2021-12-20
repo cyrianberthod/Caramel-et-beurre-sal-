@@ -191,21 +191,21 @@ coord_colonne_gauche=[(0,0),(1,0),(2,0),(3,0),(4,0)]
 coord_diag_1=[(0,0),(1,1),(2,2),(3,3),(4,4)]
 coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
 def partie_finie(P):
-     for coord in coord_ligne_haut:
+     for coord in coord_ligne_haut: #une colonne gagnante?
          bin,c=coord
-         colonne=[P[k,c] for k in range(5)]
+         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
          if all(colonne) and colonne[0]!=0: #la fonction all() renvoie True si les elements d'une liste sont identiques + on verifie qu'on n'a pas une liste de 0
              return True
-     for coord in coord_colonne_gauche:
+     for coord in coord_colonne_gauche: #une ligne gagnante?
          l,bin=coord
          ligne=[P[l,k] for k in range(5)]
          if all(ligne) and colonne[0]!=0:
              return True
      diag_1=[P[coord] for coord in coord_diag_1]
      diag_2=[P[coord] for coord in coord_diag_1]
-     if all(diag_1) and diag_1[0]!=0:
+     if all(diag_1) and diag_1[0]!=0: #la premiere diagonale gagnante?
          return True
-     elif all(diag_2) and diag_2[0]!=0:
+     elif all(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
          return True
      return False
 
