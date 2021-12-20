@@ -13,7 +13,7 @@ def play():
     global Plateau
     Plateau=np.zeros((5,5))
     global joueur
-    joueur = rd.randint(1,2)
+    joueur = rd.randint(1,2)#le joueur 1 ou le joueur 2 commence (hasard)
 
 play()
 
@@ -83,14 +83,14 @@ def pousse(vide,case):
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
 
-#figure
+#figure #xc,yc correspont au sommet bas gauche de chaque case dans le graphique
 fig = plt.figure()
 ax = plt.axes(aspect=1) #repère orthonormé
 plt.xlim(-1,6) 
 plt.ylim(-1,6)
 plt.axis('off')
 plt.title('QUIXO')
-contour = plt.Rectangle((-1,-1),7,7,fc=(0.8,0.8,0.8))
+contour = plt.Rectangle((-1,-1),7,7,fc=(0.8,0.8,0.8)) #fc=face colour : couleur de ce qu'on trace
 ax.add_patch(contour)
 fond = plt.Rectangle((0,0),5,5, fc=(0.4,0.25,0.2))
 ax.add_patch(fond)
@@ -128,7 +128,7 @@ def refresh(): #mise à jour de la figure en fonction de la matrice
                 vide = case #pas besoin de liste, maximum une case vide
                 yc, xc = vide 
                 yc = 4-yc #passage de la matrice a la figure
-                dessinvide = plt.Rectangle((xc,yc), width=1, height=1, facecolor=(0.8,0.8,0.8)) 
+                dessinvide = plt.Rectangle((xc,yc), width=1, height=1, facecolor=(0.8,0.8,0.8)) #width=largeur et height=longueur
                 ax.add_patch(dessinvide)
     
     for cube in croix:
@@ -136,7 +136,7 @@ def refresh(): #mise à jour de la figure en fonction de la matrice
         yc = 4-yc #passage de la matrice a la figure
         dessinneutre = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinneutre)
-        branche1 = plt.Rectangle((xc+0.25,yc+0.35), width=0.1, height=0.6, angle=-45, facecolor='black')
+        branche1 = plt.Rectangle((xc+0.25,yc+0.35), width=0.1, height=0.6, angle=-45, facecolor='black') # croix= 2 rectangles avec angle 45°
         branche2 = plt.Rectangle((xc+0.65,yc+0.3), width=0.1, height=0.6, angle=45, facecolor='black')
         ax.add_patch(branche1)
         ax.add_patch(branche2)
