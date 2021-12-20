@@ -185,6 +185,33 @@ fig.canvas.mpl_connect('button_press_event', clic)
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
+##fonction partie finie
+coord_ligne_haut=[(0,0),(0,1),(0,2),(0,3),(0,4)] 
+coord_colonne_gauche=[(0,0),(1,0),(2,0),(3,0),(4,0)]
+coord_diag_1=[(0,0),(1,1),(2,2),(3,3),(4,4)]
+coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
+def partie_finie(P):
+     for coord in coord_ligne_haut:
+         bin,c=coord
+         colonne=[P[k,c] for k in range(5)]
+         if all(colonne) and colonne[0]!=0: #la fonction all() renvoie True si les elements d'une liste sont identiques + on verifie qu'on n'a pas une liste de 0
+             return True
+     for coord in coord_colonne_gauche:
+         l,bin=coord
+         ligne=[P[l,k] for k in range(5)]
+         if all(ligne) and colonne[0]!=0:
+             return True
+     diag_1=[P[coord] for coord in coord_diag_1]
+     diag_2=[P[coord] for coord in coord_diag_1]
+     if all(diag_1) and diag_1[0]!=0:
+         return True
+     elif all(diag_2) and diag_2[0]!=0:
+         return True
+     return False
+
+#P=np.array([[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]]) à enlever
+#partie_finie(P)
+     
 
     
 
