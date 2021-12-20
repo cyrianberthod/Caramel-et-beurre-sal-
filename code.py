@@ -13,7 +13,7 @@ def play():
     global Plateau
     Plateau=np.zeros((5,5))
     global joueur
-    joueur = rd.randint(1,2)#le joueur 1 ou le joueur 2 commence (hasard)
+    joueur = rd.randint(1,2) #le joueur 1 ou le joueur 2 commence (hasard)
 
 play()
 
@@ -77,13 +77,38 @@ def pousse(vide,case):
     P[l,c] = joueur 
     print(P)
 
+##fonction partie finie
+def partie_finie():
+    P=Plateau
+    coord_ligne_haut=[(0,k) for k in range (5)]
+    coord_colonne_gauche=[(k,0) for k in range (5)]
+    coord_diag_1=[(k,k) for k in range (5)]
+    coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
+    for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
+         bin,c=coord
+         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
+         if all(colonne) and colonne[0]!=0: #la fonction all() renvoie True si les elements d'une liste sont identiques + on verifie qu'on n'a pas une liste de 0
+             return True
+    for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
+         l,bin=coord
+         ligne=[P[l,k] for k in range(5)]
+         if all(ligne) and colonne[0]!=0:
+             return True
+    diag_1=[P[coord] for coord in coord_diag_1]
+    diag_2=[P[coord] for coord in coord_diag_1]
+    if all(diag_1) and diag_1[0]!=0: #la premiere diagonale gagnante?
+         return True
+    elif all(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
+         return True
+    return False
 
     
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
 
-#figure #xc,yc correspont au sommet bas gauche de chaque case dans le graphique
+##figure 
+#xc,yc correspont au sommet bas gauche de chaque case dans le graphique
 fig = plt.figure()
 ax = plt.axes(aspect=1) #repère orthonormé
 plt.xlim(-1,6) 
@@ -105,8 +130,8 @@ for k in range (-1,5): #grille
     ax.add_patch(ligneh)
 
 
-
-def refresh(): #mise à jour de la figure en fonction de la matrice
+##mise à jour de la figure en fonction de la matrice
+def refresh(): 
     P=Plateau
     neutre=[]
     croix=[]
@@ -153,66 +178,48 @@ def refresh(): #mise à jour de la figure en fonction de la matrice
         dessinneutre = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinneutre)
 
-#actions declenchées par le clique de souris 
+
+##actions declenchées par le clique de souris 
 def clic(event):
     x,y = event.xdata,event.ydata #récupère les coord du clique
     c = int(x-x%1) #passage de la figure à la matrice
     l = int(4-(y-y%1))
     #global case 
     case = (l,c)
-    testvide = np.where(Plateau == -1)[0]
-    if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
-        print('capture')
-        capture_cube(case)
-        refresh()
-    else: #le cube à été capturé, phase de pousse.
-        print('test pose')
-        if pousseok(vide, case):
-            pousse(vide,case)
-            print('pose')
+    if not partie_finie():
+        testvide = np.where(Plateau == -1)[0]
+        if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
+            print('capture')
+            capture_cube(case)
             refresh()
+        else: #le cube à été capturé, phase de pousse.
+            print('test pose')
+            if pousseok(vide, case):
+                pousse(vide,case)
+                print('pose')
+                refresh()
 
-            #changement de tour
-            global joueur
-            if joueur==1:
-                joueur=2
-            else:
-                joueur=1
-             
+                #changement de tour
+                global joueur
+                if joueur==1:
+                    joueur=2
+                else:
+                    joueur=1
+    else:
+        if joueur==1:
+            gagnant="croix gagne"
+        else:
+            gagnant="rond gagne"
+        plt.text(2,2,gagnant, fontsize=15, color='red')
 
 
 fig.canvas.mpl_connect('button_press_event', clic)
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
-##fonction partie finie
-coord_ligne_haut=[(0,0),(0,1),(0,2),(0,3),(0,4)] 
-coord_colonne_gauche=[(0,0),(1,0),(2,0),(3,0),(4,0)]
-coord_diag_1=[(0,0),(1,1),(2,2),(3,3),(4,4)]
-coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
-def partie_finie(P):
-     for coord in coord_ligne_haut: #une colonne gagnante?
-         bin,c=coord
-         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-         if all(colonne) and colonne[0]!=0: #la fonction all() renvoie True si les elements d'une liste sont identiques + on verifie qu'on n'a pas une liste de 0
-             return True
-     for coord in coord_colonne_gauche: #une ligne gagnante?
-         l,bin=coord
-         ligne=[P[l,k] for k in range(5)]
-         if all(ligne) and colonne[0]!=0:
-             return True
-     diag_1=[P[coord] for coord in coord_diag_1]
-     diag_2=[P[coord] for coord in coord_diag_1]
-     if all(diag_1) and diag_1[0]!=0: #la premiere diagonale gagnante?
-         return True
-     elif all(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-         return True
-     return False
 
-#P=np.array([[1,0,0,0,0],[0,1,0,0,0],[0,0,1,0,0],[0,0,0,1,0],[0,0,0,0,1]]) à enlever
-#partie_finie(P)
+
      
 
     
-
 
