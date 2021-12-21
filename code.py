@@ -190,6 +190,7 @@ def clic(event):
     if 1<x<4 and 5.2<y<5.8:
         play()
         refresh()
+        ax.texts=[ax.texts[0]] #supprime tous les textes sauf "newgame" defini en premier
     
     #Au cours d'une partie
     else:
