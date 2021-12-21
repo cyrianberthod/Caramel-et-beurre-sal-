@@ -78,6 +78,9 @@ def pousse(vide,case):
     print(P)
 
 ##fonction partie finie
+def check(list): 
+   return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
+
 def partie_finie():
     P=Plateau
     coord_ligne_haut=[(0,k) for k in range (5)]
@@ -87,18 +90,18 @@ def partie_finie():
     for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
          bin,c=coord
          colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-         if all(colonne)==1 or all(colonne)==2: #la fonction all() renvoie True si les elements d'une liste sont identiques
+         if check(colonne) and colonne[0]!=0 #la fonction check() renvoie True si les elements d'une liste sont identiques
              return True
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
          l,bin=coord
          ligne=[P[l,k] for k in range(5)]
-         if all(ligne)==1 or all(ligne)==2:
+         if check(ligne) and ligne[0]!=0:
              return True
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
-    if all(diag_1)==1 or all(diag_1)==2 : #la premiere diagonale gagnante?
+    if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
          return True
-    elif all(diag_2)==1 or all(diag_2)==2: #la 2ème diagonale gagnante?
+    elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
          return True
     return False
 
