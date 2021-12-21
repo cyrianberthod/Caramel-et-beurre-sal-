@@ -95,7 +95,7 @@ def partie_finie():
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         l,bin=coord
         ligne=[P[l,k] for k in range(5)]
-    if check(ligne) and ligne[0]!=0:
+        if check(ligne) and ligne[0]!=0:
             return [True,ligne[0]]
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
@@ -211,7 +211,7 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if partie_finie()[0]==True:
+                if partie_finie()[0]:
                     gagnant=partie_finie()[1]
                     if gagnant==1:
                         gagnant="croix gagne"
@@ -236,7 +236,5 @@ plt.show(block=False) #evite les bugs
 
 
      
-
-    
 
     
