@@ -91,18 +91,18 @@ def partie_finie():
         bin,c=coord
         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
         if check(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
-            return True
+            return [True,colonne[0]]
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         l,bin=coord
         ligne=[P[l,k] for k in range(5)]
     if check(ligne) and ligne[0]!=0:
-            return True
+            return [True,colonne[0]]
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
     if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
-        return True
+        return [True,diag_1[0]]
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-        return True
+        return [True,diag_2[0]]
     return False
 
     
@@ -212,8 +212,8 @@ def clic(event):
                 refresh()
                 
                 if partie_finie():
-                    global joueur
-                    if joueur==1:
+                    bin,gagnant=partie_finie()
+                    if gagnant==1:
                         gagnant="croix gagne"
                     else:
                         gagnant="rond gagne"
@@ -221,7 +221,7 @@ def clic(event):
                 
                 else: #si la partie n'est pas finie
                     #changement de tour
-                    
+                    global joueur
                     if joueur==1:
                         joueur=2
                     else:
