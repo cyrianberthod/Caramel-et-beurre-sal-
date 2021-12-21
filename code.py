@@ -88,21 +88,21 @@ def partie_finie():
     coord_diag_1=[(k,k) for k in range (5)]
     coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
     for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
-         bin,c=coord
-         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-         if check(colonne) and colonne[0]!=0 #la fonction check() renvoie True si les elements d'une liste sont identiques
-             return True
+        bin,c=coord
+        colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
+        if check(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
+            return True
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
-         l,bin=coord
-         ligne=[P[l,k] for k in range(5)]
-         if check(ligne) and ligne[0]!=0:
-             return True
+        l,bin=coord
+        ligne=[P[l,k] for k in range(5)]
+    if check(ligne) and ligne[0]!=0:
+            return True
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
     if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
-         return True
+        return True
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-         return True
+        return True
     return False
 
     
@@ -195,35 +195,37 @@ def clic(event):
     else:
         c = int(x-x%1) #passage de la figure à la matrice
         l = int(4-(y-y%1))
-        #global case 
         case = (l,c)
-        if not partie_finie():
-            testvide = np.where(Plateau == -1)[0]
-            if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
-                print('capture')
-                capture_cube(case)
+        testvide = np.where(Plateau == -1)[0]
+        
+        if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
+            print('capture')
+            capture_cube(case)
+            refresh()
+        
+        else: #le cube à été capturé, phase de pousse.
+            print('test pose')
+            if pousseok(vide, case):
+                pousse(vide,case)
+                print('pose')
                 refresh()
-            else: #le cube à été capturé, phase de pousse.
-                print('test pose')
-                if pousseok(vide, case):
-                    pousse(vide,case)
-                    print('pose')
-                    refresh()
-
-                    #changement de tour
+                
+                if partie_finie():
                     global joueur
+                    if joueur==1:
+                        gagnant="croix gagne"
+                    else:
+                        gagnant="rond gagne"
+                    plt.text(1.5,2.5,gagnant, fontsize=15, color='red')
+                
+                else: #si la partie n'est pas finie
+                    #changement de tour
+                    
                     if joueur==1:
                         joueur=2
                     else:
                         joueur=1
-        else:
-            pousse(vide,case) #effectuer la dernière pousse 
-            refresh()
-            if joueur==1:
-                gagnant="croix gagne"
-            else:
-                gagnant="rond gagne"
-            plt.text(1.5,2.5,gagnant, fontsize=15, color='red')
+    
 
 
 fig.canvas.mpl_connect('button_press_event', clic)
@@ -235,4 +237,3 @@ plt.show(block=False) #evite les bugs
      
 
     
-
