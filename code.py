@@ -25,7 +25,7 @@ def capture_cube(case): #capture le cube en position case si cela est possible
     for position in coord_bordure:#lp=ligne du doublet dans position cp=colonne du doublet dans position
         lp,cp=position
         if P[lp,cp]==0 or P[lp,cp]==joueur:
-             positions_possibles.append((l,c))
+             positions_possibles.append((lp,cp))
     if case in positions_possibles: #verifie que  la position est valide
         P[l,c]=-1 #on enlève le cube, -1=case vide
         print(P)
@@ -87,18 +87,18 @@ def partie_finie():
     for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
          bin,c=coord
          colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-         if all(colonne) and colonne[0]!=0: #la fonction all() renvoie True si les elements d'une liste sont identiques + on verifie qu'on n'a pas une liste de 0
+         if all(colonne)==1 or all(colonne)==2: #la fonction all() renvoie True si les elements d'une liste sont identiques
              return True
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
          l,bin=coord
          ligne=[P[l,k] for k in range(5)]
-         if all(ligne) and colonne[0]!=0:
+         if all(ligne)==1 or all(ligne)==2:
              return True
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
-    if all(diag_1) and diag_1[0]!=0: #la premiere diagonale gagnante?
+    if all(diag_1)==1 or all(diag_1)==2 : #la premiere diagonale gagnante?
          return True
-    elif all(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
+    elif all(diag_2)==1 or all(diag_2)==2: #la 2ème diagonale gagnante?
          return True
     return False
 
@@ -182,35 +182,45 @@ def refresh():
 ##actions declenchées par le clique de souris 
 def clic(event):
     x,y = event.xdata,event.ydata #récupère les coord du clique
-    c = int(x-x%1) #passage de la figure à la matrice
-    l = int(4-(y-y%1))
-    #global case 
-    case = (l,c)
-    if not partie_finie():
-        testvide = np.where(Plateau == -1)[0]
-        if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
-            print('capture')
-            capture_cube(case)
-            refresh()
-        else: #le cube à été capturé, phase de pousse.
-            print('test pose')
-            if pousseok(vide, case):
-                pousse(vide,case)
-                print('pose')
-                refresh()
-
-                #changement de tour
-                global joueur
-                if joueur==1:
-                    joueur=2
-                else:
-                    joueur=1
+    
+    #Connexion du bouton "new game"
+    if 1<x<4 and 5.2<y<5.8:
+        play()
+        refresh()
+    
+    #Au cours d'une partie
     else:
-        if joueur==1:
-            gagnant="croix gagne"
+        c = int(x-x%1) #passage de la figure à la matrice
+        l = int(4-(y-y%1))
+        #global case 
+        case = (l,c)
+        if not partie_finie():
+            testvide = np.where(Plateau == -1)[0]
+            if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
+                print('capture')
+                capture_cube(case)
+                refresh()
+            else: #le cube à été capturé, phase de pousse.
+                print('test pose')
+                if pousseok(vide, case):
+                    pousse(vide,case)
+                    print('pose')
+                    refresh()
+
+                    #changement de tour
+                    global joueur
+                    if joueur==1:
+                        joueur=2
+                    else:
+                        joueur=1
         else:
-            gagnant="rond gagne"
-        plt.text(2,2,gagnant, fontsize=15, color='red')
+            pousse(vide,case) #effectuer la dernière pousse 
+            refresh()
+            if joueur==1:
+                gagnant="croix gagne"
+            else:
+                gagnant="rond gagne"
+            plt.text(1.5,2.5,gagnant, fontsize=15, color='red')
 
 
 fig.canvas.mpl_connect('button_press_event', clic)
