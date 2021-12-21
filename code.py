@@ -96,14 +96,14 @@ def partie_finie():
         l,bin=coord
         ligne=[P[l,k] for k in range(5)]
     if check(ligne) and ligne[0]!=0:
-            return [True,colonne[0]]
+            return [True,ligne[0]]
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
     if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
         return [True,diag_1[0]]
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
         return [True,diag_2[0]]
-    return False
+    return [False]
 
     
 
@@ -211,13 +211,13 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if partie_finie():
-                    bin,gagnant=partie_finie()
+                if partie_finie()[0]==True:
+                    gagnant=partie_finie()[1]
                     if gagnant==1:
                         gagnant="croix gagne"
                     else:
                         gagnant="rond gagne"
-                    plt.text(1.5,2.5,gagnant, fontsize=15, color='red')
+                    plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
                 
                 else: #si la partie n'est pas finie
                     #changement de tour
@@ -236,5 +236,7 @@ plt.show(block=False) #evite les bugs
 
 
      
+
+    
 
     
