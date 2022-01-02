@@ -211,8 +211,8 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if partie_finie()[0]:
-                    gagnant=partie_finie()[1]
+                if partie_finie()[0]: # if partie finie = True (la fct° renvoie une deux liste avec pour 1er terme un booléen)
+                    gagnant=partie_finie()[1] # le 2ème terme est le numéro du gagnant
                     if gagnant==1:
                         gagnant="croix gagne"
                     else:
