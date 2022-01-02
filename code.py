@@ -197,7 +197,7 @@ def clic(event):
         c = int(x-x%1) #passage de la figure à la matrice
         l = int(4-(y-y%1))
         case = (l,c)
-        testvide = np.where(Plateau == -1)[0]
+        testvide = np.where(Plateau == -1)[0] #renvoie une liste d'indices où les conditions ont été remplies
         
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
