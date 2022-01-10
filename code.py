@@ -224,7 +224,7 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if partie_finie()[0]: # if partie finie = True (la fct° renvoie une deux liste avec pour 1er terme un booléen)
+                if len(partie_finie())>0: # if partie finie = True (la fct° renvoie une deux liste avec pour 1er terme un booléen)
                     V=partie_finie()
                     gagnant=[elem[1] for elem in V] # le 2ème terme est le numéro du gagnant
                     if all(gagnant)==1 or all(gagnant)==2 : #s'il n'y a qu'un gagnant 
@@ -233,11 +233,13 @@ def clic(event):
                         else:
                             gagnant="rond gagne"
                         plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
-                    else :                                    # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
+                    else :  
+                                                          
+                        # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
                         if joueur==1:
-                            gagnant=2
+                            gagnant="rond gagne"
                         else:
-                             gagnant=1
+                             gagnant="croix gagne"
 
                         plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
                     
