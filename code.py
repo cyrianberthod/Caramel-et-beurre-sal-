@@ -87,23 +87,24 @@ def partie_finie():
     coord_colonne_gauche=[(k,0) for k in range (5)]
     coord_diag_1=[(k,k) for k in range (5)]
     coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
+    V=[]
     for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         bin,c=coord
         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
         if check(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
-            return [True,colonne[0]]
+            V.append([True,colonne[0]])
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         l,bin=coord
         ligne=[P[l,k] for k in range(5)]
         if check(ligne) and ligne[0]!=0:
-            return [True,ligne[0]]
+            V.append([True,ligne[0]])
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
     if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
-        return [True,diag_1[0]]
+        V.append([True,diag_1[0]])
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-        return [True,diag_2[0]]
-    return [False]
+        V.append([True,diag_2[0]])
+    return V
 
     
 
@@ -212,13 +213,22 @@ def clic(event):
                 refresh()
                 
                 if partie_finie()[0]: # if partie finie = True (la fct° renvoie une deux liste avec pour 1er terme un booléen)
-                    gagnant=partie_finie()[1] # le 2ème terme est le numéro du gagnant
-                    if gagnant==1:
-                        gagnant="croix gagne"
-                    else:
-                        gagnant="rond gagne"
-                    plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
-                
+                    V=partie_finie()
+                    gagnant=[elem[1] for elem in V] # le 2ème terme est le numéro du gagnant
+                    if all(gagnant)==1 or all(gagnant)==2 : #s'il n'y a qu'un gagnant 
+                        if V[0][1]==1:   # si le numéro ayant gagné est 1
+                            gagnant="croix gagne"
+                        else:
+                            gagnant="rond gagne"
+                        plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
+                   else :                                    # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
+                        if joueur==1:
+                            gagnant=2
+                         else:
+                             gagnant=1
+
+                         plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
+                    
                 else: #si la partie n'est pas finie
                     #changement de tour
                     global joueur
