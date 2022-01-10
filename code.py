@@ -52,8 +52,8 @@ def pousseok(vide,case): #case = coordonnées de là où on veut pousser
     return False
 
 ## Pousse de la ligne ou de la colonne
-def pousse(vide,case):
-    P = Plateau
+def pousse(vide,case,Plateau_choisi):
+    P = Plateau_choisi
     l,c = case #position de la case de pose
     lv,cv = vide #position de la case vide
 
@@ -105,6 +105,17 @@ def partie_finie():
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
         V.append([True,diag_2[0]])
     return V
+def explore_1tour(P):
+    all_possibilities=[]
+    for l in range(5):
+        for c in range(5):
+            if capture_cube((l,c)):
+                L=poussepossible((l,c))
+                for elem in L:
+                    P_copie=P
+                    pousse(elem,(l,c),P_copie)
+                    all_possibilities.append(P_copie)
+    return all_possibilities
 
     
 
