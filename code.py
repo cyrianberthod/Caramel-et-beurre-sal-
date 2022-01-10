@@ -185,6 +185,7 @@ def refresh():
 
 ##actions declenchées par le clique de souris 
 def clic(event):
+    global joueur
     x,y = event.xdata,event.ydata #récupère les coord du clique
     
     #Connexion du bouton "new game"
@@ -221,17 +222,16 @@ def clic(event):
                         else:
                             gagnant="rond gagne"
                         plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
-                   else :                                    # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
+                    else :                                    # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
                         if joueur==1:
                             gagnant=2
-                         else:
+                        else:
                              gagnant=1
 
-                         plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
+                        plt.text(1.5,-0.5,gagnant, fontsize=15, color='red')
                     
                 else: #si la partie n'est pas finie
                     #changement de tour
-                    global joueur
                     if joueur==1:
                         joueur=2
                     else:
