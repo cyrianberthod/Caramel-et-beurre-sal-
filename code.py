@@ -220,7 +220,7 @@ def clic(event):
         else: #le cube à été capturé, phase de pousse.
             print('test pose')
             if pousseok(vide, case):
-                pousse(vide,case)
+                pousse(vide,case,Plateau)
                 print('pose')
                 refresh()
                 
