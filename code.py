@@ -33,14 +33,14 @@ def capture_cube(case, Plateau_choisi): #capture le cube en position case si cel
     return False
 
 ##Peut-on pousser ici ?
-def poussepossible(case): #renvoie liste des coorconnées des posi° où on peut pousser
-    l,c = case
+def poussepossible(vide): #renvoie liste des coorconnées des posi° où on peut pousser
+    l,c = vide
     A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
-    if case in A: #si le pion a été pris dans un angle
+    if vide in A: #si le pion a été pris dans un angle
       return [(abs(l-4),c),(l,abs(4-c))]#on fixe l ou c , on determine les endroits ou on peut pousser par la relation avec abs() (faire dessin)
     L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle 4 posibilités
     for k in range(4):
-        if L[k]==case:
+        if L[k]==vide:
             del L[k]     #on ne peut pas laisser le pion où on l'a pris
         return L
 
