@@ -270,6 +270,6 @@ plt.pause(10000) #evite que la figure se ferme
 plt.show(block=False) #evite les bugs 
 
 
-print(explore_1tour(Plateau))  
+
 
     
