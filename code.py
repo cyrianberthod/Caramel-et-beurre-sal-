@@ -18,8 +18,8 @@ def play():
 play()
 
 
-def capture_cube(case): #capture le cube en position case si cela est possible
-    P=Plateau
+def capture_cube(case, Plateau_choisi): #capture le cube en position case si cela est possible
+    P=Plateau_choisi
     l,c=case
     positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
     for position in coord_bordure:#lp=ligne du doublet dans position cp=colonne du doublet dans position
@@ -108,15 +108,20 @@ def partie_finie():
 
 def explore_1tour(P):
     all_possibilities=[]
+    #choisi la case vide
     for l in range(5):
         for c in range(5):
-            case = (l,c)
-            if capture_cube(case):
-                L=poussepossible(case)
-                for elem in L:
-                    P_copie=P
-                    pousse(case,elem,P_copie)
-                    all_possibilities.append(P_copie)
+            P_copie=np.copy(Plateau) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
+            vide = (l,c)
+            if capture_cube(vide, P_copie):
+                #choisi la case de pousse
+                for i in range(5):
+                    for j in range(5):
+                        case = (i,j)
+                        P_copie=np.copy(Plateau)
+                        if pousseok(vide, case):
+                            pousse(vide,case,P_copie)
+                            all_possibilities.append(P_copie) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
     
@@ -200,7 +205,7 @@ def refresh():
 def clic(event):
     global joueur
     x,y = event.xdata,event.ydata #récupère les coord du clique
-    print(explore_1tour(Plateau))
+    
 
     #Connexion du bouton "new game"
     if 1<x<4 and 5.2<y<5.8:
@@ -215,12 +220,16 @@ def clic(event):
         case = (l,c)
         testvide = np.where(Plateau == -1)[0] #renvoie une liste d'indices où les conditions ont été remplies
         
+        #Phase de capture
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
-            capture_cube(case)
+            print(explore_1tour(Plateau)) 
+            capture_cube(case,Plateau)
             refresh()
+                      
         
-        else: #le cube à été capturé, phase de pousse.
+        #Phase de pousse
+        else: #le cube à été capturé
             print('test pose')
             if pousseok(vide, case):
                 pousse(vide,case,Plateau)
@@ -261,6 +270,6 @@ plt.pause(10000) #evite que la figure se ferme
 plt.show(block=False) #evite les bugs 
 
 
-     
+print(explore_1tour(Plateau))  
 
     
