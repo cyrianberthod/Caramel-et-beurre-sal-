@@ -105,15 +105,17 @@ def partie_finie():
     elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
         V.append([True,diag_2[0]])
     return V
+
 def explore_1tour(P):
     all_possibilities=[]
     for l in range(5):
         for c in range(5):
-            if capture_cube((l,c)):
-                L=poussepossible((l,c))
+            case = (l,c)
+            if capture_cube(case):
+                L=poussepossible(case)
                 for elem in L:
                     P_copie=P
-                    pousse(elem,(l,c),P_copie)
+                    pousse(case,elem,P_copie)
                     all_possibilities.append(P_copie)
     return all_possibilities
 
@@ -198,7 +200,8 @@ def refresh():
 def clic(event):
     global joueur
     x,y = event.xdata,event.ydata #récupère les coord du clique
-    
+    print(explore_1tour(Plateau))
+
     #Connexion du bouton "new game"
     if 1<x<4 and 5.2<y<5.8:
         play()
