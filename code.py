@@ -37,12 +37,10 @@ def poussepossible(vide): #renvoie liste des coorconnées des posi° où on peut
     l,c = vide
     A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
     if vide in A: #si le pion a été pris dans un angle
-      return [(abs(l-4),c),(l,abs(4-c))]#on fixe l ou c , on determine les endroits ou on peut pousser par la relation avec abs() (faire dessin)
+      return [(abs(l-4),c),(l,abs(4-c))]#on fixe l ou c , on determine les endroits ou on peut pousser par la relation avec la valeur absolue abs() (faire dessin)
     L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle 4 posibilités
-    for k in range(4):
-        if L[k]==vide:
-            del L[k]     #on ne peut pas laisser le pion où on l'a pris
-        return L
+    L.remove(vide)  #on ne peut pas laisser le pion où on l'a pris
+    return L
 
 def pousseok(vide,case): #case = coordonnées de là où on veut pousser
     Lpos=poussepossible(vide) #liste des positions de pousse possibles
@@ -72,9 +70,8 @@ def pousse(vide,case,Plateau_choisi):
         elif l > lv: #peut etre remplacer par else si impossible de poser au même endroit
             for k in range (lv,4):
                 P[k,c]=P[k+1,c]
-            
-    #pose du cube à la position de pousse           
-    P[l,c] = joueur 
+    #pose du cube à la position de pousse
+    P[l,c] = joueur     
     print(P)
 
 ##fonction partie finie
@@ -230,13 +227,12 @@ def clic(event):
         
         #Phase de pousse
         else: #le cube à été capturé
-            print('test pose')
-            if pousseok(vide, case):
+            if pousseok(vide,case):
                 pousse(vide,case,Plateau)
                 print('pose')
                 refresh()
                 
-                if len(partie_finie())>0: # if partie finie = True (la fct° renvoie une deux liste avec pour 1er terme un booléen)
+                if len(partie_finie())>0: # if partie finie = True (la fct° renvoie une 2-liste avec pour 1er terme un booléen)
                     V=partie_finie()
                     gagnant=[elem[1] for elem in V] # le 2ème terme est le numéro du gagnant
                     if all(gagnant)==1 or all(gagnant)==2 : #s'il n'y a qu'un gagnant 
