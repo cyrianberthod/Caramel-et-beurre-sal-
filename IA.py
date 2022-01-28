@@ -2,7 +2,7 @@
 from anytree import Node
 
 def creanoeud(parent,k): #au premier appel on creanoeud(parent,0)
-    if k==n or rg=explore_1tour(parent)==[]: #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
+    if k==n or rg==explore_1tour(parent)==[]: #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
         return
     else:
         rg=explore_1tour(parent)
