@@ -2,6 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
+from anytree import Node 
 #on pose l=ligne et c=colonne
 #Joueur 1 = croix , Joueur 2 = rond
 coord_bordure=[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (1, 0), (2, 0), (3, 0), (1, 4), (2, 4), (3, 4)]
@@ -103,6 +104,7 @@ def partie_finie():
         V.append([True,diag_2[0]])
     return V
 
+##fonction liées à l'IA 
 def explore_1tour(P):
     all_possibilities=[]
     #choisi la case vide
@@ -116,12 +118,22 @@ def explore_1tour(P):
                     for j in range(5):
                         case = (i,j)
                         P_copie=np.copy(Plateau)
-                        if pousseok(vide, case):
+                        if pousseok(vide, case): 
                             pousse(vide,case,P_copie)
                             all_possibilities.append(P_copie) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-    
+global n
+#n=...
+def creanoeud(parent,k): #au premier appel on creanoeud(parent,0) #(Cyrian)-pk pas creanoeud(Plateau,0)?
+    if k==n or rg==explore_1tour(parent)==[]: #(Cyrian)-pk pas rajouter "or partie_finie()" 
+        #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
+        return
+    else:
+        rg=explore_1tour(parent)
+        for element in rg:
+            N=Node(element, parent)
+            creanoeud(element,k+1) #l'élèment devient le parent, on avance d'un rang  
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
