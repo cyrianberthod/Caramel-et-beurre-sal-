@@ -1,1 +1,2 @@
 arbres et graphes : https://www.i3s.unice.fr/~tettaman/Classes/AlgoProgObjet/2012/APO-CM09.pdf
+recherche arbre avec noeud en matrice : https://anytree.readthedocs.io/en/latest/api/anytree.node.html#anytree.node.nodemixin.NodeMixin
