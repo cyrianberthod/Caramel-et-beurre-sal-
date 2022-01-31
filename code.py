@@ -79,8 +79,8 @@ def pousse(vide,case,Plateau_choisi):
 def check(list): 
    return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
 
-def partie_finie():
-    P=Plateau
+def partie_finie(Plateau_choisi):
+    P=Plateau_choisi
     coord_ligne_haut=[(0,k) for k in range (5)]
     coord_colonne_gauche=[(k,0) for k in range (5)]
     coord_diag_1=[(k,k) for k in range (5)]
@@ -123,17 +123,16 @@ def explore_1tour(P):
                             all_possibilities.append(P_copie) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-global n
-#n=...
-def creanoeud(parent,k): #au premier appel on creanoeud(parent,0) #(Cyrian)-pk pas creanoeud(Plateau,0)?
-    if k==n or rg==explore_1tour(parent)==[]: #(Cyrian)-pk pas rajouter "or partie_finie()" 
-        #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
+global rangmax
+rangmax=2
+def creanoeud(parent,k): #au premier appel creanoeud(Plateau,0)
+    if k==rangmax or partie_finie(parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
         return
     else:
-        rg=explore_1tour(parent)
-        for element in rg:
-            N=Node(element, parent)
-            creanoeud(element,k+1) #l'élèment devient le parent, on avance d'un rang  
+        rg=explore_1tour(parent) 
+        for fils in rg:
+            N=Node(fils, parent) #création d'un noeud = matrice (fils) et à partir de quel plateau (parent) le coup a permis de former cette matrice 
+            creanoeud(fils,k+1) #l'élèment devient le parent, on avance d'un rang  
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
@@ -244,8 +243,8 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if len(partie_finie())>0: # if partie finie = True (la fct° renvoie une 2-liste avec pour 1er terme un booléen)
-                    V=partie_finie()
+                if len(partie_finie(Plateau))>0: # if partie finie = True (la fct° renvoie une 2-liste avec pour 1er terme un booléen)
+                    V=partie_finie(Plateau)
                     gagnant=[elem[1] for elem in V] # le 2ème terme est le numéro du gagnant
                     if all(gagnant)==1 or all(gagnant)==2 : #s'il n'y a qu'un gagnant 
                         if V[0][1]==1:   # si le numéro ayant gagné est 1
