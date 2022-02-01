@@ -14,5 +14,6 @@ child1 = tree.Node(N, root) #l'important est que le deuxieme argument de la font
 child2 = tree.Node(N, child1)
 child3 = tree.Node('enfant3', root)
 child4 = tree.Node('petit fils teubé', child3)
+child4 = tree.Node('enfant prodige', child3)
 
 print(tree.RenderTree(root).by_attr())
