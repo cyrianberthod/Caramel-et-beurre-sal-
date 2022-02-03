@@ -117,32 +117,35 @@ def explore_1tour(Plateau_choisi, joueur):
                 for i in range(5):
                     for j in range(5):
                         case = (i,j)
-                        P_copie=np.copy(Plateau)
+                        P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
                         if pousseok(vide, case): 
-                            pousse(vide,case,P_copie, joueur)
-                            all_possibilities.append(P_copie) #ajoute le plateau virtuel une fois le coup joué
+                            pousse(vide,case,P_copie2,joueur)
+                            all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-rangmax=1
+rangmax=2
 root = tree.Node('racine')
 jlocal=joueur
+
 def creanoeud(plateau_parent,k): #au premier appel creanoeud(parent,0)
     global jlocal
     if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
         return
     else:
-        rg=explore_1tour(plateau_parent,jlocal)
-        #changement de tour dans l'IA
-        if jlocal==1:
-            jlocal=2
-        else:
-            jlocal=1
         #création du noeud parent
         parent=tree.Node(plateau_parent,root)
+        rg=explore_1tour(plateau_parent,jlocal)
+        
         #création des noeuds fils
         for fils in rg:
+            #changement de tour dans l'IA
+            if jlocal==1:
+                jlocal=2
+            else:
+                jlocal=1
             NF=tree.Node(fils, parent) #création d'un noeud = matrice (fils) et à partir de quel plateau (parent) le coup a permis de former cette matrice 
             creanoeud(fils,k+1) #l'élèment devient le parent, on avance d'un rang  
+
 creanoeud(Plateau,0)
 print(tree.RenderTree(root).by_attr())
 
