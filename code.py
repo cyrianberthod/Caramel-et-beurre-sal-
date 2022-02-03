@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
-from anytree import Node 
+import anytree as tree
 #on pose l=ligne et c=colonne
 #Joueur 1 = croix , Joueur 2 = rond
 coord_bordure=[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (1, 0), (2, 0), (3, 0), (1, 4), (2, 4), (3, 4)]
@@ -19,7 +19,7 @@ def play():
 play()
 
 
-def capture_cube(case, Plateau_choisi): #capture le cube en position case si cela est possible
+def capture_cube(case, Plateau_choisi, joueur): #capture le cube en position case si cela est possible
     P=Plateau_choisi
     l,c=case
     positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
@@ -29,7 +29,7 @@ def capture_cube(case, Plateau_choisi): #capture le cube en position case si cel
              positions_possibles.append((lp,cp))
     if case in positions_possibles: #verifie que  la position est valide
         P[l,c]=-1 #on enlève le cube, -1=case vide
-        print(P)
+        #print(P)
         return True
     return False
 
@@ -51,7 +51,7 @@ def pousseok(vide,case): #case = coordonnées de là où on veut pousser
     return False
 
 ## Pousse de la ligne ou de la colonne
-def pousse(vide,case,Plateau_choisi):
+def pousse(vide, case, Plateau_choisi, joueur):
     P = Plateau_choisi
     l,c = case #position de la case de pose
     lv,cv = vide #position de la case vide
@@ -73,7 +73,7 @@ def pousse(vide,case,Plateau_choisi):
                 P[k,c]=P[k+1,c]
     #pose du cube à la position de pousse
     P[l,c] = joueur     
-    print(P)
+    #print(P)
 
 ##fonction partie finie
 def check(list): 
@@ -105,34 +105,47 @@ def partie_finie(Plateau_choisi):
     return V
 
 ##fonction liées à l'IA 
-def explore_1tour(P):
+def explore_1tour(Plateau_choisi, joueur):
     all_possibilities=[]
     #choisi la case vide
     for l in range(5):
         for c in range(5):
-            P_copie=np.copy(Plateau) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
+            P_copie=np.copy(Plateau_choisi) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
             vide = (l,c)
-            if capture_cube(vide, P_copie):
+            if capture_cube(vide, P_copie, joueur):
                 #choisi la case de pousse
                 for i in range(5):
                     for j in range(5):
                         case = (i,j)
                         P_copie=np.copy(Plateau)
                         if pousseok(vide, case): 
-                            pousse(vide,case,P_copie)
+                            pousse(vide,case,P_copie, joueur)
                             all_possibilities.append(P_copie) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-global rangmax
-rangmax=2
-def creanoeud(parent,k): #au premier appel creanoeud(Plateau,0)
-    if k==rangmax or partie_finie(parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
+rangmax=1
+root = tree.Node('racine')
+jlocal=joueur
+def creanoeud(plateau_parent,k): #au premier appel creanoeud(parent,0)
+    global jlocal
+    if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
         return
     else:
-        rg=explore_1tour(parent) 
+        rg=explore_1tour(plateau_parent,jlocal)
+        #changement de tour dans l'IA
+        if jlocal==1:
+            jlocal=2
+        else:
+            jlocal=1
+        #création du noeud parent
+        parent=tree.Node(plateau_parent,root)
+        #création des noeuds fils
         for fils in rg:
-            N=Node(fils, parent) #création d'un noeud = matrice (fils) et à partir de quel plateau (parent) le coup a permis de former cette matrice 
+            NF=tree.Node(fils, parent) #création d'un noeud = matrice (fils) et à partir de quel plateau (parent) le coup a permis de former cette matrice 
             creanoeud(fils,k+1) #l'élèment devient le parent, on avance d'un rang  
+creanoeud(Plateau,0)
+print(tree.RenderTree(root).by_attr())
+
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
@@ -231,15 +244,15 @@ def clic(event):
         #Phase de capture
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
-            print(explore_1tour(Plateau)) 
-            capture_cube(case,Plateau)
+            #print(explore_1tour(Plateau)) 
+            capture_cube(case,Plateau,joueur)
             refresh()
                       
         
         #Phase de pousse
         else: #le cube à été capturé
             if pousseok(vide,case):
-                pousse(vide,case,Plateau)
+                pousse(vide,case,Plateau,joueur)
                 print('pose')
                 refresh()
                 
