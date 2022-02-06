@@ -123,31 +123,27 @@ def explore_1tour(Plateau_choisi, joueur):
                             all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-rangmax=2
+rangmax=3
 root = tree.Node('racine')
-jlocal=joueur
 
-def creanoeud(plateau_parent,k): #au premier appel creanoeud(parent,0)
-    global jlocal
+def creanoeud(plateau_parent, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0)
     if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
-        return
+        return 
     else:
         #création du noeud parent
-        parent=tree.Node(plateau_parent,root)
-        rg=explore_1tour(plateau_parent,jlocal)
-        
+        parent=tree.Node(plateau_parent,noeud_parent)
+        rg=explore_1tour(plateau_parent,jlocal) #liste des plateaux fils
+        #changement de tour dans l'IA
+        if jlocal==1:
+            jlocal=2
+        else:
+            jlocal=1
         #création des noeuds fils
         for fils in rg:
-            #changement de tour dans l'IA
-            if jlocal==1:
-                jlocal=2
-            else:
-                jlocal=1
-            NF=tree.Node(fils, parent) #création d'un noeud = matrice (fils) et à partir de quel plateau (parent) le coup a permis de former cette matrice 
-            creanoeud(fils,k+1) #l'élèment devient le parent, on avance d'un rang  
+            creanoeud(fils,parent,jlocal,k+1) #le fils devient le parent, on avance d'un rang  
 
-creanoeud(Plateau,0)
-print(tree.RenderTree(root).by_attr())
+#creanoeud(Plateau,root,joueur,0)
+#print(tree.RenderTree(root).by_attr())
 
 
 
@@ -247,7 +243,8 @@ def clic(event):
         #Phase de capture
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
-            #print(explore_1tour(Plateau)) 
+            creanoeud(Plateau,root,joueur,0)
+            print(tree.RenderTree(root).by_attr())
             capture_cube(case,Plateau,joueur)
             refresh()
                       
