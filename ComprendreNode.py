@@ -1,3 +1,5 @@
+#un site pas mal : https://anytree.readthedocs.io/en/1.0.1/api.html
+
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
