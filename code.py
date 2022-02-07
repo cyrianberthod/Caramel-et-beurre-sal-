@@ -123,24 +123,24 @@ def explore_1tour(Plateau_choisi, joueur):
                             all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-rangmax=3
+rangmax=3 #rang 1 = plateau actuel on rangmax-1 coups
 root = tree.Node('racine')
 
-def creanoeud(plateau_parent, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0) #plateau_parent est une matrice(=valeur du  , noeud parent est un node 
-    if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement)(l'IA voit à n coups) ou si la branche est finie
+def creanoeud(plateau_fils, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0)
+    if k==rangmax or partie_finie(plateau_fils): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
         return 
     else:
-        #création du noeud parent
-        parent=tree.Node(plateau_parent,noeud_parent)
-        rg=explore_1tour(plateau_parent,jlocal) #liste des plateaux fils
+        #création du noeud fils
+        fils=tree.Node(plateau_fils,noeud_parent)
+        rg=explore_1tour(plateau_fils,jlocal) #liste des plateaux petit-fils
         #changement de tour dans l'IA
         if jlocal==1:
             jlocal=2
         else:
             jlocal=1
-        #création des noeuds fils
-        for fils in rg:
-            creanoeud(fils,parent,jlocal,k+1) #le fils devient le parent, on avance d'un rang  
+        #création des noeuds petit-fils
+        for petit_fils in rg:
+            creanoeud(petit_fils,fils,jlocal,k+1) #le petit-fils devient le fils, on avance d'un rang  
 
 #creanoeud(Plateau,root,joueur,0)
 #print(tree.RenderTree(root).by_attr())
@@ -291,5 +291,7 @@ plt.show(block=False) #evite les bugs
 
 
 
+
+    
 
     
