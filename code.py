@@ -146,9 +146,12 @@ def creaarbre(plateau_fils, noeud_parent, jlocal, k): #au premier appel creanoeu
         for petit_fils in rg:
             creaarbre(petit_fils,fils,jlocal,k+1) #le petit-fils devient le fils, on avance d'un rang , au tour d'après le joueur doit être différent
 
-#creanoeud(Plateau,root,joueur,0)
+#creaarbre(Plateau,root,joueur,0)
 #print(tree.RenderTree(root).by_attr())
 
+def IA_aleatoire(Plateau_choisi):
+    coup = rd.choice(explore_1tour)
+    return coup
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
@@ -157,17 +160,37 @@ def creaarbre(plateau_fils, noeud_parent, jlocal, k): #au premier appel creanoeu
 #xc,yc correspont au sommet bas gauche de chaque case dans le graphique
 fig = plt.figure()
 ax = plt.axes(aspect=1) #repère orthonormé
-plt.xlim(-1,6) 
+plt.xlim(-4,9) 
 plt.ylim(-1,6)
 plt.axis('off')
 plt.title('QUIXO')
 contour = plt.Rectangle((-1,-1),7,7,fc=(0.8,0.8,0.8)) #fc=face colour : couleur de ce qu'on trace
-ax.add_patch(contour)
-fond = plt.Rectangle((0,0),5,5, fc=(0.4,0.25,0.2))
+fond = plt.Rectangle((-4,-1),13,7,fc=(0.5,0.5,0.5))
 ax.add_patch(fond)
-bouton=plt.Rectangle((1,5.2),3,0.6,fc='black') #bouton new game
-ax.add_patch(bouton)
-newgame=plt.text(2.5,5.5,'New Game',fontsize=10,horizontalalignment='center',verticalalignment='center',color='w')
+ax.add_patch(contour)
+fond_plateau = plt.Rectangle((0,0),5,5, fc=(0.4,0.25,0.2))
+ax.add_patch(fond_plateau)
+
+#boutons
+bouton_newgame=plt.Rectangle((1,5.2),3,0.6,fc='black') #bouton new game
+ax.add_patch(bouton_newgame)
+text_newgame=plt.text(2.5,5.5,'New Game',fontsize=8,horizontalalignment='center',verticalalignment='center',color='w')
+
+text_joueur1=plt.text(-2.5,5.5,'Joueur 1',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+text_joueur2=plt.text(7.5,5.5,'Joueur 2',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+
+for i in [-3.5,6.5]:
+    for j in range (4,0,-1):
+        b=plt.Rectangle((i,j),2,0.6,fc='black')
+        ax.add_patch(b)
+for i in [-2.5,7.5]:
+    text_utilisateur=plt.text(i,4.3,'utilisateur',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+    text_IArand=plt.text(i,3.3,'IA aleatoire',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+    text_IAoff=plt.text(i,2.3,'IA offensive',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+    text_IAdef=plt.text(i,1.3,'IA defensive',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+
+
+
 for k in range (-1,5): #grille
     h=k+0.975
     lignev = plt.Rectangle((h,0),0.05,5,fc=(0.8,0.8,0.8))
@@ -235,7 +258,7 @@ def clic(event):
     if 1<x<4 and 5.2<y<5.8:
         play()
         refresh()
-        ax.texts=[ax.texts[0]] #supprime tous les textes sauf "newgame" defini en premier
+        ax.texts=[ax.texts[k] for k in range(11)] #supprime les textes defini apres les 11 initiaux 
     
     #Au cours d'une partie
     else:
