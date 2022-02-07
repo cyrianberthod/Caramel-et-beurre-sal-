@@ -11,3 +11,6 @@ Seance 2: 10/01
 intelligence artificielle: le but est de faire reflechir une IA à n coups (en gros on lui fait explorer toutes les possibilités pendant n coups sur une matrice copie)(pour cela : une fonction qui explore tout les coup à un tour(1) puis une fonction récursive)(1) retourne une liste de toutes les matrices possibles. Une fois qu'on a fait une telle fonction: on fait jouer en mode agressif: gagner au plus vite , defensif: le seul but est de diminuer le nombre de coup gagants potentiels du joueur suivant 
 
 mettre IA dans code!
+
+seance 3-4 7/02:
+on a fait la fonction qui voit à n coups (en théorie mais en pratique on va pas à plus 2 tour car temps trop long). On fait maintenant des intelligences artificielles avec différents critères: aléatoire (cyrian) , celui qui aligne le plus de pion au rang n(IA offensive léa),  faire en sorte que l'adversaire aligne le moins de pions (IA defensive samuel)
