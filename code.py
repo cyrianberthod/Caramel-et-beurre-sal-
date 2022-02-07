@@ -123,11 +123,12 @@ def explore_1tour(Plateau_choisi, joueur):
                             all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-rangmax=3 #rang 1 = plateau actuel on rangmax-1 coups
-root = tree.Node('racine')
 
 #Pourquoi faire un arbre ? 
 #but : déterminer toutes nos actions possibles pour les rangsmax coups prochains 
+
+rangmax=3 #rang 1 = plateau actuel on rangmax-1 coups
+root = tree.Node('racine')
 
 def creaarbre(plateau_fils, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0)
     if k==rangmax or partie_finie(plateau_fils): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
