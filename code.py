@@ -104,7 +104,7 @@ def partie_finie(Plateau_choisi):
         V.append([True,diag_2[0]])
     return V
 
-##fonction liées à l'IA 
+#----------------------------------l'IA------------------------------------------------------------------------
 def explore_1tour(Plateau_choisi, joueur):
     all_possibilities=[]
     #choisi la case vide
