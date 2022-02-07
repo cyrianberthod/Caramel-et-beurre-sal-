@@ -126,8 +126,8 @@ def explore_1tour(Plateau_choisi, joueur):
 rangmax=3
 root = tree.Node('racine')
 
-def creanoeud(plateau_parent, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0)
-    if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement) ou si la branche est finie
+def creanoeud(plateau_parent, noeud_parent, jlocal, k): #au premier appel creanoeud(Plateau,root,joueur,0) #plateau_parent est une matrice(=valeur du  , noeud parent est un node 
+    if k==rangmax or partie_finie(plateau_parent): #on s'arrête si on est arrivé au rang n (defini globalement)(l'IA voit à n coups) ou si la branche est finie
         return 
     else:
         #création du noeud parent
