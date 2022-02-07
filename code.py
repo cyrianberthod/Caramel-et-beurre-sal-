@@ -270,7 +270,7 @@ def clic(event):
         #Phase de capture
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
-            creanoeud(Plateau,root,joueur,0)
+            creaarbre(Plateau,root,joueur,0)
             print(tree.RenderTree(root).by_attr())
             capture_cube(case,Plateau,joueur)
             refresh()
