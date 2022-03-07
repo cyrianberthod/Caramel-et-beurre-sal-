@@ -3,14 +3,14 @@ def IA_aligne(joueur,n): #aligne le plus de pion au rang n, joueur = joueur jou�
     possiblité=génération[n]
     Lfinie=[]
     Lmax=0
-    nb=0 #nombre de pions maximums alignés 
+    nbmax=0 #nombre de pions maximums alignés 
     for k in range(possibilité) :
         if partie_finie(possibilité[k]): #la chemin aboutit à la victoire au rang n = c'est le meilleur chemin possible 
             Lfinie.append(possibilité[k])
         else:
-            if aligne(possibilité[k],joueur)>nb:
+            if aligne(possibilité[k],joueur)>nbmax: #on cherche la matrice pour laquelle il y a le plus de pions alignés
                 Lmax=possibilité[k]
-                nb=possibilité[k]
+                nb=aligne(possibilité[k],joueur)
     if len(Lfinie)!=0: #s'il y a 1 ou plusieurs chemin menant à la victoire on en prend un aléatoirement 
         choix=random.choice(Lfinie)
         w = tree.Walker() 
