@@ -13,12 +13,13 @@ def IA_aligne(joueur,n): #aligne le plus de pion au rang n, joueur = joueur jou�
                 nb=aligne(possibilité[k],joueur)
     if len(Lfinie)!=0: #s'il y a 1 ou plusieurs chemin menant à la victoire on en prend un aléatoirement 
         choix=random.choice(Lfinie)
-        w = tree.Walker() 
-        chemin = w.walk(root, choix) 
-        chemin[2]       #renvoie qq de la forme (Node('/racine/fils sain d esprit'),)
-        return(random.choice(Lfinie))
-    else:
-        return(Lmax)
+    else:   #si aucun chemin ne mène à la victoire on choisit celui grace auquel l'IA aligne le plus de pions 
+        choix=Lmax
+    #on cherche le chemin à prendre pour aller vers le choix 
+    w = tree.Walker() 
+    chemin = w.walk(root, choix)   
+    return(chemin[2]) # PROBLEME : renvoie qq de la forme (Node('/racine/fils sain d esprit'),) => on voudrait la valeur de l'étape 2 du chemin (ce que l'IA doit jouer à ce tour)
+
 
 
 def aligne(matrice,joueur): #on cherche à savoir le nbre max de pions du joueur sur un même ligne ou colonne ou diagonale 
