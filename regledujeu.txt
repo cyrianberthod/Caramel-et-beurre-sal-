@@ -3,3 +3,8 @@ règles du jeu:
     Saisit un cube neutre en périphérie du plateau qui porte sa marque ou un cube neutre.
     À l'aide du cube choisi, il pousse une rangée de cube, de façon à combler l'espace laissé par le cube.
     Lorsque 5 marques sont alignées (en rangée ou en diagonale), la partie est remportée par le ou les joueurs jouant cette marque.
+
+
+Idée pour rapport final:
+vision critique face à l'utilisation de la bibliotèque anytree => plus adapté pour la visualisation d'arbres et arbres avec nb ou chaîne de caractères 
+mais pas trop pour matrice et parcours 
