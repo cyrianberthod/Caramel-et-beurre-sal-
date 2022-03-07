@@ -2,24 +2,42 @@ def IA_aligne(joueur,n): #aligne le plus de pion au rang n, joueur = joueur jou�
     génération= [[noeud.name for noeud in fils] for fils in tree.ZigZagGroupIter(root, maxlevel=n)] #liste de valeurs de noeuds par liste de génération 
     possiblité=génération[n]
     Lfinie=[]
-    Lmax=0
+    option_max=0
     nbmax=0 #nombre de pions maximums alignés 
     for k in range(possibilité) :
         if partie_finie(possibilité[k]): #la chemin aboutit à la victoire au rang n = c'est le meilleur chemin possible 
             Lfinie.append(possibilité[k])
         else:
             if aligne(possibilité[k],joueur)>nbmax: #on cherche la matrice pour laquelle il y a le plus de pions alignés
-                Lmax=possibilité[k]
+                option_max=possibilité[k]
                 nb=aligne(possibilité[k],joueur)
     if len(Lfinie)!=0: #s'il y a 1 ou plusieurs chemin menant à la victoire on en prend un aléatoirement 
         choix=random.choice(Lfinie)
     else:   #si aucun chemin ne mène à la victoire on choisit celui grace auquel l'IA aligne le plus de pions 
-        choix=Lmax
+        choix=option_max 
     #on cherche le chemin à prendre pour aller vers le choix 
     w = tree.Walker() 
     chemin = w.walk(root, choix)   
     return(chemin[2]) # PROBLEME : renvoie qq de la forme (Node('/racine/fils sain d esprit'),) => on voudrait la valeur de l'étape 2 du chemin (ce que l'IA doit jouer à ce tour)
 
+def IA_defencif(joueur,n): #aligne le plus de pion au rang n, joueur = joueur joué par l'IA
+    if joueur=1:
+        adv=2
+    else:
+        adv=1
+    génération= [[noeud.name for noeud in fils] for fils in tree.ZigZagGroupIter(root, maxlevel=n)] #liste de valeurs de noeuds par liste de génération 
+    possiblité=génération[n]
+    option_min=0
+    nbmin=0 #nombre de pions minimum alignés par l'adversaire  
+    for k in range(possibilité) :
+        if aligne(possibilité[k],adv)<nbmax: #on cherche la matrice pour laquelle il y a le plus de pions alignés
+                Lmin=possibilité[k]
+                nb=aligne(possibilité[k],joueur)
+    choix=option_min
+    #on cherche le chemin à prendre pour aller vers le choix 
+    w = tree.Walker() 
+    chemin = w.walk(root, choix)   
+    return(chemin[2]) # PROBLEME : renvoie qq de la forme (Node('/racine/fils sain d esprit'),) => on voudrait la valeur de l'étape 2 du chemin (ce que l'IA doit jouer à ce tour)
 
 
 def aligne(matrice,joueur): #on cherche à savoir le nbre max de pions du joueur sur un même ligne ou colonne ou diagonale 
