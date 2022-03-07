@@ -19,7 +19,7 @@ def IA_aligne(joueur,n): #aligne le plus de pion au rang n, joueur = joueur jou�
     w = tree.Walker() 
     chemin = w.walk(root, choix)   
     return(chemin[2]) # PROBLEME : renvoie qq de la forme (Node('/racine/fils sain d esprit'),) => on voudrait la valeur de l'étape 2 du chemin (ce que l'IA doit jouer à ce tour)
-
+                        # child.ancestor[0].name
 def IA_defencif(joueur,n): #aligne le plus de pion au rang n, joueur = joueur joué par l'IA
     if joueur=1:
         adv=2
