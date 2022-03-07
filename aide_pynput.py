@@ -23,3 +23,21 @@ mouse.click(Button.left, 2)
 
 # Scroll two steps down
 mouse.scroll(0, 2)
+######
+import mouse
+import matplotlib.pyplot as plt
+
+fig=plt.figure()
+plt.xlim(-2,3)
+plt.ylim(-2,3)
+
+
+def testclick(event):
+    x,y=event.xdata,event.ydata
+    if 1<x<2 and y<0:
+        print("la chouette")
+
+mouse.move(1.2,-1)
+mouse.click()
+plt.show()
+fig.canvas.mpl_connect('button_press_event', testclick)
