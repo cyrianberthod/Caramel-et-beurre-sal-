@@ -1,3 +1,56 @@
+def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du plateau = celui dont l'act° a formé ce plateau
+# 1 : mode offensive 2: mode defensif
+    poids= 0
+    adv=chg_joueur(joueurIA)
+
+    if fenetre.count(joueurIA) == 5: #le joueur a une ligne gagnante
+        poids+= 1000
+
+    if mode_IA==1:
+        if fenetre.count(adv) == 5: #le joueur adverse gagne
+            poids -=1000
+        elif fenetre.count(joueurIA) == 4 :
+            poids += 40
+        elif fenetre.count(joueurIA) == 3 :
+            poids += 30
+        if fenetre.count(joueurIA) == 2 :
+            poids +=20
+        if fenetre.count(joueurIA) == 1 :
+            poids +=10
+
+    elif mode_IA==2:
+        if fenetre.count(adv) == 5: #l'adversaire gagne
+            poids -= 1000
+        elif fenetre.count(joueurIA) == 4 :
+            poids += 10
+        elif fenetre.count(joueurIA) == 3 :
+            poids += 20
+        if fenetre.count(joueurIA) == 2 :
+            poids +=30
+        if fenetre.count(joueurIA) == 1 :
+            poids +=40
+    return poids
+
+def poids_plateau(plateau, joueurIA, mode_IA):
+    poids= 0
+    #poids colonnes
+    for c in range(5):
+        colonne=[plateau[l,c] for l in range(5)] #la fenêtre = listes des valeurs sur la colonne c
+        poids+=poids_fenetre(colonne,joueurIA, mode_IA)
+    #poids lignes
+    for l in range(5):
+        ligne=[plateau[l,c] for c in range(5)]
+        poids+=poids_fenetre(ligne,joueurIA, mode_IA)
+    #poids diagonales
+    diag_1=[plateau[k,k] for k in range (5)]
+    poids+=poids_fenetre(diag_1,joueurIA, mode_IA)
+    diag_2=[plateau[4,0],plateau[3,1],plateau[2,2],plateau[1,3],plateau[0,4]]
+    poids+=poids_fenetre(diag_2,joueurIA, mode_IA)
+
+    return poids
+
+#/!\ NE PAS REGARDER CE QUI SUIT : C'ETAIT L'ANCIENNE VERSION DE L'IA 
+
 def IA_aligne(joueur,n): #aligne le plus de pion au rang n, joueur = joueur joué par l'IA
     génération= [[noeud.name for noeud in fils] for fils in tree.ZigZagGroupIter(root, maxlevel=n)] #liste de valeurs de noeuds par liste de génération 
     possiblité=génération[n]
