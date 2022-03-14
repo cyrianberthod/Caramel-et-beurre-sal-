@@ -104,6 +104,48 @@ def partie_finie(Plateau_choisi):
         V.append([True,diag_2[0]])
     return V
 
+def partie_finie2(plateau, joueur):
+    adv=chg_joueur(joueur)
+    if joueur==1:
+        adv=2
+        victoire_adv= "Les ronds ont gagné"
+        victoire_joueur= "Le croix ont gagné"
+    else:
+        adv=1
+        victoire_adv= "Les croix ont gagné"
+        victoire_joueur= "Les ronds ont gagné"
+    V=0
+    #colonnes gagnantes ?
+    for c in range(5):
+        colonne=[plateau[l,c] for l in range(5)]
+        if colonne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+            return victoire_adv
+        if colonne.count(joueur)==5: #le joueur a une colonne gagnante
+            V+=1
+    #colonnes gagnantes ?
+    for l in range(5):
+        ligne=[plateau[l,c] for c in range(5)]
+        if ligne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+            return victoire_adv
+        if ligne.count(joueur)==5: #le joueur a une colonne gagnante
+            V+=1
+    #diagonales gagnantes ?
+    diag_1=[plateau[k,k] for k in range (5)]
+    if diag_1.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+        return victoire_adv
+    if diag_1.count(joueur)==5: #le joueur a une colonne gagnante
+            V+=1
+    diag_2=[plateau[4,0],plateau[3,1],plateau[2,2],plateau[1,3],plateau[0,4]]
+    if diag_2.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+        return victoire_adv
+    if diag_2.count(joueur)==5: #le joueur a une colonne gagnante
+            V+=1
+
+    if V!=0:
+        return victoire_joueur
+    else: #personne n'a gagné
+        return False
+
 #----------------------------------l'IA------------------------------------------------------------------------
 def explore_1tour(Plateau_choisi, joueur):
     all_possibilities=[]
