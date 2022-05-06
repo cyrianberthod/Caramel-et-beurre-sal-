@@ -171,7 +171,7 @@ def explore_1tour(Plateau_local, joueur_local):
         P_copie=np.copy(Plateau_local) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
         if capture_cube(vide, P_copie, joueur_local):
            #choisi la case de pousse
-           for case in coord_bordure
+            for case in coord_bordure:
                if pousseok(vide, case): 
                   P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
                   pousse(vide,case,P_copie2,joueur_local)
@@ -179,7 +179,7 @@ def explore_1tour(Plateau_local, joueur_local):
     return all_possibilities
 
 def IA_aleatoire(Plateau_local, joueurIA):
-    coup = rd.choice(explore_1tour(Plateau_local, joueurIA) #choisit un terme 
+    coup = rd.choice(explore_1tour(Plateau_local, joueurIA)) #choisit un terme 
     return coup
 
 def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg du plateau
@@ -190,11 +190,11 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     #commun quelque soit le mode de l'IA
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
         poids+= 1000              
-   elif fenetre.count(adv) == 5: #l'adversaire gagne
+    elif fenetre.count(adv) == 5: #l'adversaire gagne
             poids -=1000
                      
    #selon le mode de l'IA             
-   if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
+    if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
         if fenetre.count(joueurIA) == 4 :
             poids += 40
         elif fenetre.count(joueurIA) == 3 :
