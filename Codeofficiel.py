@@ -308,13 +308,13 @@ def minimax(plateau_choisi,profondeur,joueur_choisi):
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau)
                 pousse(vide,case,Pcopy,joueur_choisi)
-                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, False)[1]
+                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, False)[1]  #modifier pour etre en accord avec arguments entrée fonction.
                 if nouveau_score > max:
                     max = nouveau_score
                     coup = (vide,case)
-                alpha = max(alpha, value)
-                if alpha >= beta:
-                    break
+               # alpha = max(alpha, value)
+                #if alpha >= beta:
+                  #  break
         return coup, max
 
     else: # Min player (avdersaire)
@@ -327,10 +327,10 @@ def minimax(plateau_choisi,profondeur,joueur_choisi):
                 if nouveau_score < min:
                     min = nouveau_score
                     coup = (vide,case)
-                beta = min(beta, min)
-                if alpha >= beta:
-                    break
-        return coup, max
+               # beta = min(beta, min)
+                #if alpha >= beta:
+                    #break
+        return coup, max #return coup,min??
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
