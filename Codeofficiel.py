@@ -235,7 +235,7 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 
     return poids
 
-def liste_prises(Plateau_local, joueur_local): 
+def prisepossible(Plateau_local, joueur_local): 
     L=[]
     for coord in coord_bordure:
         if Plateau_local(coord)==joueur_local or Plateau_local(coord)==0: 
@@ -249,10 +249,10 @@ def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un 
     return False
 
 def dernier_noeud(Plateau_local, joueur_local):
-    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(liste_prises(Plateau_local)) == 0
+    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(prisepossible(Plateau_local)) == 0
                      
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
-    prises_valides=liste_prises(Plateau_local, joueur_local)
+    prises_valides=prisepossible(Plateau_local, joueur_local)
     partie_terminée = dernier_noeud(Plateau_local, joueur_local)
     if profondeur == 0 or partie_terminée:
         if partie_terminée:
