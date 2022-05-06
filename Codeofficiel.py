@@ -61,14 +61,14 @@ def pousse(vide, case, Plateau_choisi, joueur):
         if c<cv:
             for k in range (cv,0,-1):
                 P[l,k]=P[l,k-1]
-        elif c > cv: #peut etre remplacer par else si impossible de poser au même endroit
+        else : 
             for k in range (cv,4):
                 P[l,k]=P[l,k+1]
     elif c == cv: #peut etre remplacer par else 
         if l < lv:
             for k in range (lv,0,-1):
                 P[k,c]=P[k-1,c]
-        elif l > lv: #peut etre remplacer par else si impossible de poser au même endroit
+        else :
             for k in range (lv,4):
                 P[k,c]=P[k+1,c]
     #pose du cube à la position de pousse
