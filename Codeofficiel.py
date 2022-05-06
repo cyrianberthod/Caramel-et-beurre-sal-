@@ -2,7 +2,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
-import anytree as tree
 #on pose l=ligne et c=colonne
 #Joueur 1 = croix , Joueur 2 = rond
 coord_bordure=[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (1, 0), (2, 0), (3, 0), (1, 4), (2, 4), (3, 4)]
@@ -19,8 +18,8 @@ def play():
 play()
 
 
-def capture_cube(case, Plateau_choisi, joueur): #capture le cube en position case si cela est possible
-    P=Plateau_choisi
+def capture_cube(case, Plateau_local, joueur): #capture le cube en position case si cela est possible
+    P=Plateau_local
     l,c=case
     positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
     for position in coord_bordure:
@@ -50,8 +49,8 @@ def pousseok(vide,case): #case = coordonnées de là où l'on veut pousser
     return False
 
 ## Pousse de la ligne ou de la colonne
-def pousse(vide, case, Plateau_choisi, joueur):
-    P = Plateau_choisi
+def pousse(vide, case, Plateau_local, joueur):
+    P = Plateau_local
     l,c = case #position de la case de pose
     lv,cv = vide #position de la case vide
 
@@ -77,8 +76,8 @@ def pousse(vide, case, Plateau_choisi, joueur):
 def elem_identiques(list): #return True si la liste est constituée d'éléments identiques, false sinon.
    return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
 
-def partie_finie(Plateau_choisi): 
-    P=Plateau_choisi
+def partie_finie(Plateau_local): 
+    P=Plateau_local
     coord_ligne_haut=[(0,k) for k in range (5)]
     coord_colonne_gauche=[(k,0) for k in range (5)]
     coord_diag_1=[(k,k) for k in range (5)]
@@ -102,8 +101,8 @@ def partie_finie(Plateau_choisi):
         V.append([True,diag_2[0]])
     return V
 
-def partie_finie_optimisee(Plateau_choisi):
-    P=Plateau_choisi
+def partie_finie_optimisee(Plateau_local):
+    P=Plateau_local
     V=[]
     for c in range(5):
         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne
@@ -121,30 +120,31 @@ def partie_finie_optimisee(Plateau_choisi):
         V.append([True,diag_2[0]])
     return V
 
-def partie_finie2(plateau, joueur):
+def partie_finie2(Plateau_local, joueur):
+    P=Plateau_local
     adv=chg_joueur(joueur)
     V=0
     #colonnes gagnantes ?
     for c in range(5):
-        colonne=[plateau[l,c] for l in range(5)]
+        colonne=[P[l,c] for l in range(5)]
         if colonne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
         if colonne.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
     #lignes gagnantes ?
     for l in range(5):
-        ligne=[plateau[l,c] for c in range(5)]
+        ligne=[P[l,c] for c in range(5)]
         if ligne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
         if ligne.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
     #diagonales gagnantes ?
-    diag_1=[plateau[k,k] for k in range (5)]
+    diag_1=[P[k,k] for k in range (5)]
     if diag_1.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
     if diag_1.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
-    diag_2=[plateau[4,0],plateau[3,1],plateau[2,2],plateau[1,3],plateau[0,4]]
+    diag_2=[P[4,0],P[3,1],P[2,2],P[1,3],P[0,4]]
     if diag_2.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
     if diag_2.count(joueur)==5: #le joueur a une colonne gagnante
@@ -157,51 +157,51 @@ def partie_finie2(plateau, joueur):
 
 
 #----------------------------------l'IA------------------------------------------------------------------------
-def explore_1tour(Plateau_choisi, joueur):
+def explore_1tour(Plateau_local, joueur_local):
     all_possibilities=[]
     #choisi la case vide
     for l in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
         for c in range(5): 
-            P_copie=np.copy(Plateau_choisi) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
+            P_copie=np.copy(Plateau_local) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
             vide = (l,c)
-            if capture_cube(vide, P_copie, joueur):
+            if capture_cube(vide, P_copie, joueur_local):
                 #choisi la case de pousse
                 for i in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
                     for j in range(5):
                         case = (i,j)
                         P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
                         if pousseok(vide, case): 
-                            pousse(vide,case,P_copie2,joueur)
+                            pousse(vide,case,P_copie2,joueur_local)
                             all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-def IA_aleatoire(Plateau_choisi):
+def IA_aleatoire(Plateau_local):
     coup = rd.choice(explore_1tour)
     return coup
 
-def coup_gagnant(Plateau_choisi, joueur_choisi):
-    for P in explore_1tour(Plateau_choisi, joueur_choisi):
+def coup_gagnant(Plateau_local, joueur_local):
+    for P in explore_1tour(Plateau_local, joueur_local):
         if partie_finie(P):
             return True
     return False
 
-def chg_joueur(joueur_choisi):
-    if joueur_choisi==1:
-        joueur=2
+def chg_joueur(joueur_local):
+    if joueur_local==1:
+        joueur_local=2
     else:
-        joueur=1
-    return joueur
+        joueur_local=1
+    return joueur_local
 
 
-def liste_prises(Plateau):
+def liste_prises(Plateau_local):
     L=[]
     for coord in coord_bordure:
         if coord==joueur or coord==0:  #comment peut on avoir coord (doublet) ==joueur (1 ou 2 )? corriger par if Plateau[coord]==joueur???
             L.append(joueur)  #L.append(coord) plutot vu l'utilisation qu'on en fait dans minmax()
     return L
 
-def dernier_noeud(plateau_choisi, joueur_choisi):
-    return coup_gagnant(plateau_choisi, joueur_choisi) or coup_gagnant(plateau_choisi, chg_joueur(joueur_choisi)) or len(liste_prises(plateau_choisi)) == 0
+def dernier_noeud(Plateau_local, joueur_local):
+    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(liste_prises(Plateau_local)) == 0
 
 def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du plateau = celui dont l'act° a formé ce plateau
 # 1 : mode offensive 2: mode defensif
@@ -236,38 +236,39 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du
             poids +=40
     return poids
 
-def poids_plateau(plateau, joueurIA, mode_IA):
+def poids_plateau(Plateau_local, joueurIA, mode_IA):
+    P=Plateau_local
     poids= 0
     #poids colonnes
     for c in range(5):
-        colonne=[plateau[l,c] for l in range(5)] #la fenêtre = listes des valeurs sur la colonne c
+        colonne=[P[l,c] for l in range(5)] #la fenêtre = listes des valeurs sur la colonne c
         poids+=poids_fenetre(colonne,joueurIA, mode_IA)
     #poids lignes
     for l in range(5):
-        ligne=[plateau[l,c] for c in range(5)]
+        ligne=[P[l,c] for c in range(5)]
         poids+=poids_fenetre(ligne,joueurIA, mode_IA)
     #poids diagonales
-    diag_1=[plateau[k,k] for k in range (5)]
+    diag_1=[P[k,k] for k in range (5)]
     poids+=poids_fenetre(diag_1,joueurIA, mode_IA)
-    diag_2=[plateau[4,0],plateau[3,1],plateau[2,2],plateau[1,3],plateau[0,4]]
+    diag_2=[P[4,0],P[3,1],P[2,2],P[1,3],P[0,4]]
     poids+=poids_fenetre(diag_2,joueurIA, mode_IA)
 
     return poids
 
-def minimax(plateau_choisi,profondeur,joueur_choisi):
-    prises_valides=liste_prises(plateau_choisi)
-    partie_terminée = dernier_noeud(plateau_choisi, joueur_choisi)
+def minimax(Plateau_local,profondeur,joueur_local):
+    prises_valides=liste_prises(Plateau_local)
+    partie_terminée = dernier_noeud(Plateau_local, joueur_local)
     if profondeur == 0 or partie_terminée:
         if partie_terminée:
-            if coup_gagnant(plateau_choisi, chg_joueur(joueur_choisi)):
+            if coup_gagnant(Plateau_local, chg_joueur(joueur_local)):
                 return (None, 100000000000000)
-            elif coup_gagnant(plateau_choisi,joueur_choisi):
+            elif coup_gagnant(Plateau_local,joueur_local):
                 return (None, -10000000000000)
             else: # Game is over, no more valid moves
                 return (None, 0)
         else: # profondeur=0
-            return (None, poids_plateau(plateau_choisi, chg_joueur(joueur_choisi), 1))
-    if joueur_choisi:
+            return (None, poids_plateau(Plateau_local, chg_joueur(joueur_local), 1))
+    if joueur_local:
         max = -math.inf
         #vide = rd.choice(prises_valides)
         #case = rd.choice(poussepossible(vide))
