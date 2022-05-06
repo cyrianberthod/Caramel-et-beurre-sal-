@@ -182,35 +182,20 @@ def IA_aleatoire(Plateau_local, joueurIA):
     coup = rd.choice(explore_1tour(Plateau_local, joueurIA) #choisit un terme 
     return coup
 
-                     
-def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un plateau gagnant ?
-    for P in explore_1tour(Plateau_local, joueur_local):
-        if partie_finie(P):
-            return True
-    return False
-
-def liste_prises(Plateau_local, joueur_local): 
-    L=[]
-    for coord in coord_bordure:
-        if Plateau_local(coord)==joueur_local or Plateau_local(coord)==0: 
-            L.append(coord)  
-    return L
-
-def dernier_noeud(Plateau_local, joueur_local):
-    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(liste_prises(Plateau_local)) == 0
-
-def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du plateau = celui dont l'act° a formé ce plateau
+def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg du plateau
 # 1 : mode offensive 2: mode defensif
     poids= 0
     adv=chg_joueur(joueurIA)
-
-    if fenetre.count(joueurIA) == 5: #le joueur a une ligne gagnante
-        poids+= 1000
-
-    if mode_IA==1:
-        if fenetre.count(adv) == 5: #le joueur adverse gagne
+    
+    #commun quelque soit le mode de l'IA
+    if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
+        poids+= 1000              
+   elif fenetre.count(adv) == 5: #l'adversaire gagne
             poids -=1000
-        elif fenetre.count(joueurIA) == 4 :
+                     
+   #selon le mode de l'IA             
+   if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
+        if fenetre.count(joueurIA) == 4 :
             poids += 40
         elif fenetre.count(joueurIA) == 3 :
             poids += 30
@@ -219,17 +204,16 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du
         elif fenetre.count(joueurIA) == 1 :
             poids +=10
 
-    elif mode_IA==2:
-        if fenetre.count(adv) == 5: #l'adversaire gagne
-            poids -= 1000
-        elif fenetre.count(joueurIA) == 4 :
+    elif mode_IA==2: #moins l'adversaire aligne de pions plus la fenêtre a un poids élevé
+        if fenetre.count(adv) == 4 :
             poids += 10
-        elif fenetre.count(joueurIA) == 3 :
+        elif fenetre.count(adv) == 3 :
             poids += 20
-        elif fenetre.count(joueurIA) == 2 :
-            poids +=30
-        elif fenetre.count(joueurIA) == 1 :
+        elif fenetre.count(adv) == 2 :
+            poids += 30
+        elif fenetre.count(adv) == 1 :
             poids +=40
+                     
     return poids
 
 def poids_plateau(Plateau_local, joueurIA, mode_IA):
@@ -251,6 +235,22 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 
     return poids
 
+def liste_prises(Plateau_local, joueur_local): 
+    L=[]
+    for coord in coord_bordure:
+        if Plateau_local(coord)==joueur_local or Plateau_local(coord)==0: 
+            L.append(coord)  
+    return L 
+                     
+def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un plateau gagnant ?
+    for P in explore_1tour(Plateau_local, joueur_local):
+        if partie_finie(P):
+            return True
+    return False
+
+def dernier_noeud(Plateau_local, joueur_local):
+    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(liste_prises(Plateau_local)) == 0
+                     
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
     prises_valides=liste_prises(Plateau_local, joueur_local)
     partie_terminée = dernier_noeud(Plateau_local, joueur_local)
