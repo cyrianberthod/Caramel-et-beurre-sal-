@@ -17,6 +17,13 @@ def play():
 
 play()
 
+def chg_joueur(joueur_local):
+    if joueur_local==1:
+        joueur_local=2
+    else:
+        joueur_local=1
+    return joueur_local
+
 
 def capture_cube(case, Plateau_local, joueur): #capture le cube en position case si cela est possible
     P=Plateau_local
@@ -120,38 +127,38 @@ def partie_finie_optimisee(Plateau_local):
         V.append([True,diag_2[0]])
     return V
 
-def partie_finie2(Plateau_local, joueur):
+def partie_finie2(Plateau_local, joueur_local):
     P=Plateau_local
-    adv=chg_joueur(joueur)
+    adv=chg_joueur(joueur_local)
     V=0
     #colonnes gagnantes ?
     for c in range(5):
         colonne=[P[l,c] for l in range(5)]
         if colonne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
-        if colonne.count(joueur)==5: #le joueur a une colonne gagnante
+        if colonne.count(joueur_local)==5: #le joueur a une colonne gagnante
             V+=1
     #lignes gagnantes ?
     for l in range(5):
         ligne=[P[l,c] for c in range(5)]
         if ligne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
-        if ligne.count(joueur)==5: #le joueur a une colonne gagnante
+        if ligne.count(joueur_local)==5: #le joueur a une colonne gagnante
             V+=1
     #diagonales gagnantes ?
     diag_1=[P[k,k] for k in range (5)]
     if diag_1.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
-    if diag_1.count(joueur)==5: #le joueur a une colonne gagnante
+    if diag_1.count(joueur_local)==5: #le joueur a une colonne gagnante
             V+=1
     diag_2=[P[4,0],P[3,1],P[2,2],P[1,3],P[0,4]]
     if diag_2.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
-    if diag_2.count(joueur)==5: #le joueur a une colonne gagnante
+    if diag_2.count(joueur_local)==5: #le joueur a une colonne gagnante
             V+=1
 
     if V!=0:
-        return joueur
+        return joueur_local
     else: #personne n'a gagné
         return False
 
@@ -160,40 +167,29 @@ def partie_finie2(Plateau_local, joueur):
 def explore_1tour(Plateau_local, joueur_local):
     all_possibilities=[]
     #choisi la case vide
-    for l in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
-        for c in range(5): 
-            P_copie=np.copy(Plateau_local) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
-            vide = (l,c)
-            if capture_cube(vide, P_copie, joueur_local):
-                #choisi la case de pousse
-                for i in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
-                    for j in range(5):
-                        case = (i,j)
-                        P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
-                        if pousseok(vide, case): 
-                            pousse(vide,case,P_copie2,joueur_local)
-                            all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
+    for vide in coord_bordure : 
+        P_copie=np.copy(Plateau_local) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
+        if capture_cube(vide, P_copie, joueur_local):
+           #choisi la case de pousse
+           for case in coord_bordure
+               if pousseok(vide, case): 
+                  P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
+                  pousse(vide,case,P_copie2,joueur_local)
+                  all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
-def IA_aleatoire(Plateau_local):
-    coup = rd.choice(explore_1tour)
+def IA_aleatoire(Plateau_local, joueurIA):
+    coup = rd.choice(explore_1tour(Plateau_local, joueurIA) #choisit un terme 
     return coup
 
-def coup_gagnant(Plateau_local, joueur_local):
+                     
+def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un plateau gagnant ?
     for P in explore_1tour(Plateau_local, joueur_local):
         if partie_finie(P):
             return True
     return False
 
-def chg_joueur(joueur_local):
-    if joueur_local==1:
-        joueur_local=2
-    else:
-        joueur_local=1
-    return joueur_local
-
-
-def liste_prises(Plateau_local):
+def liste_prises(Plateau_local): #
     L=[]
     for coord in coord_bordure:
         if coord==joueur or coord==0:  #comment peut on avoir coord (doublet) ==joueur (1 ou 2 )? corriger par if Plateau[coord]==joueur???
