@@ -23,8 +23,8 @@ def capture_cube(case, Plateau_choisi, joueur): #capture le cube en position cas
     P=Plateau_choisi
     l,c=case
     positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
-    for position in coord_bordure:#lp=ligne du doublet dans position cp=colonne du doublet dans position
-        lp,cp=position
+    for position in coord_bordure:
+        lp,cp=position #lp=ligne et cp=colonne du doublet dans position
         if P[lp,cp]==0 or P[lp,cp]==joueur:
              positions_possibles.append((lp,cp))
     if case in positions_possibles: #verifie que  la position est valide
@@ -36,16 +36,16 @@ def capture_cube(case, Plateau_choisi, joueur): #capture le cube en position cas
 def poussepossible(vide): #renvoie liste des coorconnées des posi° où on peut pousser
     l,c = vide
     A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
-    if vide in A: #si le pion a été pris dans un angle
-      return [(abs(l-4),c),(l,abs(4-c))]#on fixe l ou c , on determine les endroits ou on peut pousser par la relation avec la valeur absolue abs() (faire dessin)
-    L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle 4 posibilités
+    if vide in A: #si le pion a été pris dans un angle : 2 possiblités
+      return [(abs(l-4),c),(l,abs(4-c))] #on fixe l ou c
+    L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle : 4 posibilités
     L.remove(vide)  #on ne peut pas laisser le pion où on l'a pris
     return L
 
-def pousseok(vide,case): #case = coordonnées de là où on veut pousser
+def pousseok(vide,case): #case = coordonnées de là où l'on veut pousser
     Lpos=poussepossible(vide) #liste des positions de pousse possibles
     for k in Lpos:
-        if case==k:  #l'endroit où le joueur veut poser est dans Lposs => c ok
+        if case==k:  #si l'endroit où le joueur veut poser est dans Lposs
             return True
     return False
 
@@ -70,14 +70,14 @@ def pousse(vide, case, Plateau_choisi, joueur):
         else :
             for k in range (lv,4):
                 P[k,c]=P[k+1,c]
-    #pose du cube à la position de pousse
+    #le pion du joueur se retrouve à la position de pousse
     P[l,c] = joueur     
 
 ##fonction partie finie
-def check(list): 
+def elem_identiques(list): #return True si la liste est constituée d'éléments identiques, false sinon.
    return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
 
-def partie_finie(Plateau_choisi):
+def partie_finie(Plateau_choisi): 
     P=Plateau_choisi
     coord_ligne_haut=[(0,k) for k in range (5)]
     coord_colonne_gauche=[(k,0) for k in range (5)]
@@ -87,79 +87,74 @@ def partie_finie(Plateau_choisi):
     for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         bin,c=coord
         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-        if check(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
+        if elem_identiques(colonne) and colonne[0]!=0: #la fonction elem_identiques() renvoie True si les elements d'une liste sont identiques
             V.append([True,colonne[0]])
     for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
         l,bin=coord
         ligne=[P[l,k] for k in range(5)]
-        if check(ligne) and ligne[0]!=0:
+        if elem_identiques(ligne) and ligne[0]!=0:
             V.append([True,ligne[0]])
     diag_1=[P[coord] for coord in coord_diag_1]
     diag_2=[P[coord] for coord in coord_diag_1]
-    if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
+    if elem_identiques(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
         V.append([True,diag_1[0]])
-    elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
+    elif elem_identiques(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
         V.append([True,diag_2[0]])
     return V
+
 def partie_finie_optimisee(Plateau_choisi):
     P=Plateau_choisi
     V=[]
     for c in range(5):
         colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne
-        if check(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
+        if elem_identiques(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
             V.append([True,colonne[0]])
     for l in range(5):
         ligne=[P[l,k]  for k in range(5)]
-        if check(ligne) and ligne[0]!=0:
+        if elem_identiques(ligne) and ligne[0]!=0:
             V.append([True,ligne[0]])
     diag_1=[P[(k,k)] for k in range(5)]
     diag_2=[P[coord] for coord in [(4,0),(3,1),(2,2),(1,3),(0,4)]]
-    if check(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
+    if elem_identiques(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
         V.append([True,diag_1[0]])
-    elif check(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
+    elif elem_identiques(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
         V.append([True,diag_2[0]])
     return V
+
 def partie_finie2(plateau, joueur):
     adv=chg_joueur(joueur)
-    if joueur==1:
-        adv=2
-        victoire_adv= "Les ronds ont gagné"
-        victoire_joueur= "Le croix ont gagné"
-    else:
-        adv=1
-        victoire_adv= "Les croix ont gagné"
-        victoire_joueur= "Les ronds ont gagné"
     V=0
     #colonnes gagnantes ?
     for c in range(5):
         colonne=[plateau[l,c] for l in range(5)]
         if colonne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
-            return victoire_adv
+            return adv
         if colonne.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
-    #colonnes gagnantes ?
+    #lignes gagnantes ?
     for l in range(5):
         ligne=[plateau[l,c] for c in range(5)]
         if ligne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
-            return victoire_adv
+            return adv
         if ligne.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
     #diagonales gagnantes ?
     diag_1=[plateau[k,k] for k in range (5)]
     if diag_1.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
-        return victoire_adv
+        return adv
     if diag_1.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
     diag_2=[plateau[4,0],plateau[3,1],plateau[2,2],plateau[1,3],plateau[0,4]]
     if diag_2.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
-        return victoire_adv
+        return adv
     if diag_2.count(joueur)==5: #le joueur a une colonne gagnante
             V+=1
 
     if V!=0:
-        return victoire_joueur
+        return joueur
     else: #personne n'a gagné
         return False
+
 
 #----------------------------------l'IA------------------------------------------------------------------------
 def explore_1tour(Plateau_choisi, joueur):
