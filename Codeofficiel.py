@@ -29,7 +29,6 @@ def capture_cube(case, Plateau_choisi, joueur): #capture le cube en position cas
              positions_possibles.append((lp,cp))
     if case in positions_possibles: #verifie que  la position est valide
         P[l,c]=-1 #on enlève le cube, -1=case vide
-        #print(P)
         return True
     return False
 
@@ -73,7 +72,6 @@ def pousse(vide, case, Plateau_choisi, joueur):
                 P[k,c]=P[k+1,c]
     #pose du cube à la position de pousse
     P[l,c] = joueur     
-    #print(P)
 
 ##fonction partie finie
 def check(list): 
