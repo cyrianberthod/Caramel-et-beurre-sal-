@@ -189,11 +189,11 @@ def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un 
             return True
     return False
 
-def liste_prises(Plateau_local): #
+def liste_prises(Plateau_local, joueur_local): 
     L=[]
     for coord in coord_bordure:
-        if coord==joueur or coord==0:  #comment peut on avoir coord (doublet) ==joueur (1 ou 2 )? corriger par if Plateau[coord]==joueur???
-            L.append(joueur)  #L.append(coord) plutot vu l'utilisation qu'on en fait dans minmax()
+        if Plateau_local(coord)==joueur_local or Plateau_local(coord)==0: 
+            L.append(coord)  
     return L
 
 def dernier_noeud(Plateau_local, joueur_local):
@@ -214,9 +214,9 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du
             poids += 40
         elif fenetre.count(joueurIA) == 3 :
             poids += 30
-        if fenetre.count(joueurIA) == 2 :
+        elif fenetre.count(joueurIA) == 2 :
             poids +=20
-        if fenetre.count(joueurIA) == 1 :
+        elif fenetre.count(joueurIA) == 1 :
             poids +=10
 
     elif mode_IA==2:
@@ -226,9 +226,9 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueur = celui qui joue au rg du
             poids += 10
         elif fenetre.count(joueurIA) == 3 :
             poids += 20
-        if fenetre.count(joueurIA) == 2 :
+        elif fenetre.count(joueurIA) == 2 :
             poids +=30
-        if fenetre.count(joueurIA) == 1 :
+        elif fenetre.count(joueurIA) == 1 :
             poids +=40
     return poids
 
@@ -251,18 +251,18 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 
     return poids
 
-def minimax(Plateau_local,profondeur,joueur_local):
-    prises_valides=liste_prises(Plateau_local)
+def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
+    prises_valides=liste_prises(Plateau_local, joueur_local)
     partie_terminée = dernier_noeud(Plateau_local, joueur_local)
     if profondeur == 0 or partie_terminée:
         if partie_terminée:
             if coup_gagnant(Plateau_local, chg_joueur(joueur_local)):
-                return (None, 100000000000000)
+                return (None, -100000000000000)
             elif coup_gagnant(Plateau_local,joueur_local):
-                return (None, -10000000000000)
-            else: # Game is over, no more valid moves
+                return (None, 10000000000000)
+            else: #La partie est finie mais personne n'a gagné
                 return (None, 0)
-        else: # profondeur=0
+        else: #profondeur=0
             return (None, poids_plateau(Plateau_local, chg_joueur(joueur_local), 1))
     if joueur_local:
         max = -math.inf
@@ -270,8 +270,8 @@ def minimax(Plateau_local,profondeur,joueur_local):
         #case = rd.choice(poussepossible(vide))
         for vide in prises_valides:
             for case in poussepossible(vide):
-                Pcopy = np.copy(Plateau)
-                pousse(vide,case,Pcopy,joueur_choisi)
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
                 nouveau_score = minimax(Pcopy, depth-1, alpha, beta, False)[1]  #modifier pour etre en accord avec arguments entrée fonction.
                 if nouveau_score > max:
                     max = nouveau_score
@@ -285,8 +285,8 @@ def minimax(Plateau_local,profondeur,joueur_local):
         min = math.inf
         for vide in prises_valides:
             for case in poussepossible(vide):
-                Pcopy = np.copy(Plateau)
-                pousse(vide,case,Pcopy,joueur_choisi)
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
                 nouveau_score = minimax(Pcopy, depth-1, alpha, beta, True)[1]
                 if nouveau_score < min:
                     min = nouveau_score
@@ -295,6 +295,49 @@ def minimax(Plateau_local,profondeur,joueur_local):
                 #if alpha >= beta:
                     #break
         return coup, max #return coup,min??
+
+def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
+    
+    prises_valides=liste_prises(Plateau_local)
+
+    #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
+    if partie_finie2(Plateau_local, joueur_local)==joueur:
+        return (None, 10**6)
+    elif partie_finie2(Plateau_local, joueur_local)==chg_joueur(joueur):
+        return (None, -10**6)
+    elif profondeur==0:
+        return (None, poids_plateau(Plateau_local, joueur_local, 1)) #mode offensif ? 
+
+    #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
+    elif joueur_local==joueur: #on fait jouer le joueur virtuellement 
+        max = -np.inf
+        for vide in prises_valides:
+            for case in poussepossible(vide):
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
+                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
+                if nouveau_score > max:
+                    max = nouveau_score
+                    coup = (vide,case)
+                alpha = max(alpha, nouveau_score)
+                if alpha >= beta:
+                    break
+        return coup, max
+    
+    else: #on fait jouer l'adversaire virtuellement 
+        min = np.inf
+        for vide in prises_valides:
+            for case in poussepossible(vide):
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
+                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
+                if nouveau_score < min:
+                    min = nouveau_score
+                    coup = (vide,case)
+                beta = min(beta, nouveau_score)
+                if alpha >= beta:
+                    break
+        return coup, min
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
