@@ -189,9 +189,9 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     
     #commun quelque soit le mode de l'IA
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
-        poids+= 1000              
+        poids+= 100000              
     elif fenetre.count(adv) == 5: #l'adversaire gagne
-            poids -=1000
+            poids -=100000
                      
    #selon le mode de l'IA             
     if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
@@ -254,7 +254,7 @@ def dernier_noeud(Plateau_local, joueur_local):
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
     prises_valides=prisepossible(Plateau_local, joueur_local)
     partie_terminée = dernier_noeud(Plateau_local, joueur_local)
-    if profondeur == 0 or partie_terminée:
+    if profondeur == 0 or partie_terminée: 
         if partie_terminée:
             if coup_gagnant(Plateau_local, chg_joueur(joueur_local)):
                 return (None, -100000000000000)
@@ -298,33 +298,29 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
 
 def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
     
-    prises_valides=liste_prises(Plateau_local)
+    prises=prisepossible(Plateau_local)
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
-    if partie_finie2(Plateau_local, joueur_local)==joueur:
-        return (None, 10**6)
-    elif partie_finie2(Plateau_local, joueur_local)==chg_joueur(joueur):
-        return (None, -10**6)
-    elif profondeur==0:
-        return (None, poids_plateau(Plateau_local, joueur_local, 1)) #mode offensif ? 
+    if partie_finie2(Plateau_local, joueur_local)!=False or profondeur==0:
+        return [None, poids_plateau(Plateau_local, joueur_local, 1)]
 
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
-    elif joueur_local==joueur: #on fait jouer le joueur virtuellement 
-        max = -np.inf
-        for vide in prises_valides:
+    elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
+        max = -np.inf #moins l'infini 
+        for vide in prises:
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau_local)
-                pousse(vide,case,Pcopy,joueur_local)
-                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
+                pousse(vide,case,Pcopy,joueur_local) #joue le coup
+                nouveau_score = minimax(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le poids et pas le coup
                 if nouveau_score > max:
                     max = nouveau_score
                     coup = (vide,case)
-                alpha = max(alpha, nouveau_score)
-                if alpha >= beta:
+                alpha = max(alpha, nouveau_score) 
+                if alpha >= beta: #évite de calculer des branches inutilement 
                     break
-        return coup, max
+        return [coup, max]
     
-    else: #on fait jouer l'adversaire virtuellement 
+    else: #on fait jouer l'adversaire virtuellement et on essaye de faire le pire coup possible
         min = np.inf
         for vide in prises_valides:
             for case in poussepossible(vide):
@@ -337,7 +333,7 @@ def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
                 beta = min(beta, nouveau_score)
                 if alpha >= beta:
                     break
-        return coup, min
+        return [coup, min]
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
