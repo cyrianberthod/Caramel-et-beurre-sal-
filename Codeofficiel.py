@@ -167,13 +167,13 @@ def partie_finie2(plateau, joueur):
 def explore_1tour(Plateau_choisi, joueur):
     all_possibilities=[]
     #choisi la case vide
-    for l in range(5):
-        for c in range(5):
+    for l in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
+        for c in range(5): 
             P_copie=np.copy(Plateau_choisi) #fonction np.copy permet une copie viable du plateau de jeu alors qu'un simple égale crée des interferences avec l'autre plateau
             vide = (l,c)
             if capture_cube(vide, P_copie, joueur):
                 #choisi la case de pousse
-                for i in range(5):
+                for i in range(5): #pourquoi pas faire un for coord in coord_bordure , on gagnerait du temps de calcul à l'ordi
                     for j in range(5):
                         case = (i,j)
                         P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
