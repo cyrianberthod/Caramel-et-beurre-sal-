@@ -229,7 +229,7 @@ def chg_joueur(joueur_choisi):
 def liste_prises(Plateau):
     L=[]
     for coord in coord_bordure:
-        if coord==joueur or coord==0:
+        if coord==joueur or coord==0:  #comment peut on avoir coord (doublet) ==joueur (1 ou 2 )? corriger par if Plateau[coord]==joueur???
             L.append(joueur)
     return L
 
