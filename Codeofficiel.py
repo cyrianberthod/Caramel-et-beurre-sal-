@@ -250,6 +250,7 @@ def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un 
 
 def dernier_noeud(Plateau_local, joueur_local):
     return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(prisepossible(Plateau_local)) == 0
+#manque argument entrée "joueur_local" pour prise possible().
                      
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
     prises_valides=prisepossible(Plateau_local, joueur_local)
