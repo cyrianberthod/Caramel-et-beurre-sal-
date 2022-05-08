@@ -83,50 +83,6 @@ def pousse(vide, case, Plateau_local, joueur):
 def elem_identiques(list): #return True si la liste est constituée d'éléments identiques, false sinon.
    return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
 
-def partie_finie(Plateau_local): 
-    P=Plateau_local
-    coord_ligne_haut=[(0,k) for k in range (5)]
-    coord_colonne_gauche=[(k,0) for k in range (5)]
-    coord_diag_1=[(k,k) for k in range (5)]
-    coord_diag_2=[(4,0),(3,1),(2,2),(1,3),(0,4)]
-    V=[]
-    for coord in coord_ligne_haut: #une colonne gagnante? #pourquoi ne pas remplacer par un simple compteur?
-        bin,c=coord
-        colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne 
-        if elem_identiques(colonne) and colonne[0]!=0: #la fonction elem_identiques() renvoie True si les elements d'une liste sont identiques
-            V.append([True,colonne[0]])
-    for coord in coord_colonne_gauche: #une ligne gagnante? #pourquoi ne pas remplacer par un simple compteur?
-        l,bin=coord
-        ligne=[P[l,k] for k in range(5)]
-        if elem_identiques(ligne) and ligne[0]!=0:
-            V.append([True,ligne[0]])
-    diag_1=[P[coord] for coord in coord_diag_1]
-    diag_2=[P[coord] for coord in coord_diag_1]
-    if elem_identiques(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
-        V.append([True,diag_1[0]])
-    elif elem_identiques(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-        V.append([True,diag_2[0]])
-    return V
-
-def partie_finie_optimisee(Plateau_local):
-    P=Plateau_local
-    V=[]
-    for c in range(5):
-        colonne=[P[k,c] for k in range(5)] #on recupère les données de chaque colonne
-        if elem_identiques(colonne) and colonne[0]!=0: #la fonction check() renvoie True si les elements d'une liste sont identiques
-            V.append([True,colonne[0]])
-    for l in range(5):
-        ligne=[P[l,k]  for k in range(5)]
-        if elem_identiques(ligne) and ligne[0]!=0:
-            V.append([True,ligne[0]])
-    diag_1=[P[(k,k)] for k in range(5)]
-    diag_2=[P[coord] for coord in [(4,0),(3,1),(2,2),(1,3),(0,4)]]
-    if elem_identiques(diag_1) and diag_1[0]!=0 : #la premiere diagonale gagnante?
-        V.append([True,diag_1[0]])
-    elif elem_identiques(diag_2) and diag_2[0]!=0: #la 2ème diagonale gagnante?
-        V.append([True,diag_2[0]])
-    return V
-
 def partie_finie2(Plateau_local, joueur_local):
     P=Plateau_local
     adv=chg_joueur(joueur_local)
