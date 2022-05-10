@@ -404,10 +404,10 @@ def clic(event):
         c = int(x-x%1) #passage de la figure à la matrice
         l = int(4-(y-y%1))
         case = (l,c)
-        testvide = np.where(Plateau == -1)[0] #renvoie une liste d'indices où les conditions ont été remplies
+        testvide = np.where(Plateau == -1, 1,0) #renvoie une matrice avec des 1 là où il y a des -1 dans le plateau et des 0 sinon
         
         #Phase de capture
-        if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
+        if testvide==np.zeros((5,5)):
             print('capture')
             print(minimax_cyrian(Plateau, 3, -1000000, 1000000, joueur))
             capture_cube(case,Plateau,joueur)
