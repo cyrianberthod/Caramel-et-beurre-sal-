@@ -145,7 +145,7 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     
     #commun quelque soit le mode de l'IA
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
-        poids+= 100000              
+        poids+= 10000              
     elif fenetre.count(adv) == 5: #l'adversaire gagne
             poids -=100000
                      
