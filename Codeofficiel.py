@@ -145,7 +145,7 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     
     #commun quelque soit le mode de l'IA
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
-        poids+= 10000              
+        poids+= 100000              
     elif fenetre.count(adv) == 5: #l'adversaire gagne
             poids -=100000
                      
@@ -390,8 +390,10 @@ def refresh():
 ##actions declenchées par le clique de souris 
 def clic(event):
     global joueur
+    #if clique
     x,y = event.xdata,event.ydata #récupère les coord du clique
-    
+    #else (clavier)
+    #x,y,x',y' = minimax()
 
     #Connexion du bouton "new game"
     if 1<x<4 and 5.2<y<5.8:
@@ -409,7 +411,6 @@ def clic(event):
         #Phase de capture
         if testvide==np.zeros((5,5)):
             print('capture')
-            print(minimax_cyrian(Plateau, 3, -1000000, 1000000, joueur))
             capture_cube(case,Plateau,joueur)
             refresh()
                       
@@ -432,10 +433,11 @@ def clic(event):
                 else: #si la partie n'est pas finie
                     #changement de tour
                     joueur = chg_joueur(joueur)
-    
+                    print(minimax_cyrian(Plateau, 3, -10000000000, 100000000000, joueur))
 
 
 fig.canvas.mpl_connect('button_press_event', clic)
+fig.canvas.mpl_connect('keyboard_event', clic)
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
