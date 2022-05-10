@@ -83,7 +83,7 @@ def pousse(vide, case, Plateau_local, joueur):
 def elem_identiques(list): #return True si la liste est constituée d'éléments identiques, false sinon.
    return list.count(list[0]) == len(list) #on compte le nombre d'occurence du premier element , si il est egal à la taille de la liste alors la liste est formée d'elements identiques
 
-def partie_finie2(Plateau_local, joueur_local):
+def partie_finie(Plateau_local, joueur_local):
     P=Plateau_local
     adv=chg_joueur(joueur_local)
     V=0
@@ -421,8 +421,8 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if partie_finie2(Plateau,joueur) != False: #si la partie est terminée
-                    if partie_finie2(Plateau,joueur)==1:
+                if partie_finie(Plateau,joueur) != False: #si la partie est terminée
+                    if partie_finie(Plateau,joueur)==1:
                         gagnant="rond gagne"
                     else:
                         gagnant="croix gagne"
