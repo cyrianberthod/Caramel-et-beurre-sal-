@@ -194,7 +194,7 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 def prisepossible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
     L=[]
     for coord in coord_bordure:
-        if Plateau_local(coord)==joueur_local or Plateau_local(coord)==0:  #mettre les (coord) entre [] car on manipule matrice.
+        if Plateau_local[coord]==joueur_local or Plateau_local[coord]==0:  
             L.append(coord)  
     return L 
                      
