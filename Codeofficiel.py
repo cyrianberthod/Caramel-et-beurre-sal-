@@ -255,42 +255,42 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
 
 def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
     
-    prises=prisepossible(Plateau_local)
+    prises=prisepossible(Plateau_local, joueur_local)
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
-    if partie_finie2(Plateau_local, joueur_local)!=False or profondeur==0:
+    if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
         return [None, poids_plateau(Plateau_local, joueur_local, 1)]
 
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
     elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
-        max = -np.inf #moins l'infini 
+        maxi = -np.inf #moins l'infini 
         for vide in prises:
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(vide,case,Pcopy,joueur_local) #joue le coup
-                nouveau_score = minimax(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le poids et pas le coup
-                if nouveau_score > max:
-                    max = nouveau_score
+                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le poids et pas le coup
+                if nouveau_score > maxi:
+                    maxi = nouveau_score
                     coup = (vide,case)
                 alpha = max(alpha, nouveau_score) 
                 if alpha >= beta: #évite de calculer des branches inutilement 
                     break
-        return [coup, max]
+        return [coup, maxi]
     
     else: #on fait jouer l'adversaire virtuellement et on essaye de faire le pire coup possible
-        min = np.inf
-        for vide in prises_valides:
+        mini = np.inf
+        for vide in prises:
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(vide,case,Pcopy,joueur_local)
-                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
-                if nouveau_score < min:
-                    min = nouveau_score
+                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
+                if nouveau_score < mini:
+                    mini = nouveau_score
                     coup = (vide,case)
                 beta = min(beta, nouveau_score)
                 if alpha >= beta:
                     break
-        return [coup, min]
+        return [coup, mini]
 
 
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
