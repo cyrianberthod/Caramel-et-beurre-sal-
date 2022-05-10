@@ -409,9 +409,7 @@ def clic(event):
         #Phase de capture
         if testvide.size == 0: #vérifie que aucun cube n'a deja été sélectioné
             print('capture')
-            creaarbre(Plateau,root,joueur,0)
-            #print(tree.RenderTree(root).by_attr())
-            print(minimax(Plateau, 10, joueur))
+            print(minimax_cyrian(Plateau, 3, -1000000, 1000000, joueur))
             capture_cube(case,Plateau,joueur)
             refresh()
                       
@@ -423,31 +421,17 @@ def clic(event):
                 print('pose')
                 refresh()
                 
-                if len(partie_finie(Plateau))>0: # if partie finie = True (la fct° renvoie une 2-liste avec pour 1er terme un booléen)
-                    V=partie_finie(Plateau)
-                    gagnant=[elem[1] for elem in V] # le 2ème terme est le numéro du gagnant
-                    if all(gagnant)==1 or all(gagnant)==2 : #s'il n'y a qu'un gagnant 
-                        if V[0][1]==1:   # si le numéro ayant gagné est 1
-                            gagnant="croix gagne"
-                        else:
-                            gagnant="rond gagne"
-                        plt.text(1,-0.5,gagnant, fontsize=15, color='red')
-                    else :  
-                                                          
-                        # s'il y a plusieurs gagnants c'est que le joueur a fait gagné sont adv
-                        if joueur==1:
-                            gagnant="rond gagne"
-                        else:
-                             gagnant="croix gagne"
+                if partie_finie2(Plateau,joueur) != False: #si la partie est terminée
+                    if partie_finie2(Plateau,joueur)==1:
+                        gagnant="rond gagne"
+                    else:
+                        gagnant="croix gagne"
 
-                        plt.text(1,-0.5,gagnant, fontsize=15, color='red')
+                    plt.text(1,-0.5,gagnant, fontsize=15, color='red')
                     
                 else: #si la partie n'est pas finie
                     #changement de tour
-                    if joueur==1:
-                        joueur=2
-                    else:
-                        joueur=1
+                    joueur = chg_joueur(joueur)
     
 
 
