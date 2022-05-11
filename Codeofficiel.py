@@ -424,9 +424,9 @@ def clic(event):
                 
                 if partie_finie(Plateau,joueur) != False: #si la partie est terminée
                     if partie_finie(Plateau,joueur)==1:
-                        gagnant="rond gagne"
-                    else:
                         gagnant="croix gagne"
+                    else:
+                        gagnant="rond gagne"
 
                     plt.text(1,-0.5,gagnant, fontsize=15, color='red')
                     
