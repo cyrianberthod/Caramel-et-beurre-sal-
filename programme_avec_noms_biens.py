@@ -265,18 +265,18 @@ bouton_newgame=plt.Rectangle((1,5.2),3,0.6,fc='black') #bouton new game
 ax.add_patch(bouton_newgame)
 text_newgame=plt.text(2.5,5.5,'New Game',fontsize=8,horizontalalignment='center',verticalalignment='center',color='w')
 
-text_joueur1=plt.text(-2.5,5.5,'Joueur 1',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
-text_joueur2=plt.text(7.5,5.5,'Joueur 2',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+text_joueur1=plt.text(-2.5,5.5,'Consigne',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+#text_joueur2=plt.text(7.5,5.5,'Joueur 2',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
 
-for i in [-3.5,6.5]:
-    for j in range (4,0,-1):
-        b=plt.Rectangle((i,j),2,0.6,fc='black')
-        ax.add_patch(b)
-for i in [-2.5,7.5]:
-    text_utilisateur=plt.text(i,4.3,'utilisateur',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
-    text_IArand=plt.text(i,3.3,'IA aleatoire',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
-    text_IAoff=plt.text(i,2.3,'IA offensive',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
-    text_IAdef=plt.text(i,1.3,'IA defensive',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+#for i in [-3.5,6.5]:
+    #for j in range (4,0,-1):
+       # b=plt.Rectangle((i,j),2,0.6,fc='black')
+        #ax.add_patch(b)
+#for i in [-2.5,7.5]:
+    #text_utilisateur=plt.text(i,4.3,'Utilisateur',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
+text_IArand=plt.text(-2.5,3.3,'IA aleatoire taper c',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
+text_IAoff=plt.text(-2.5,2.3,'IA offensive taper a',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
+text_IAdef=plt.text(-2.5,1.3,'IA defensive taper b',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
 
 
 
