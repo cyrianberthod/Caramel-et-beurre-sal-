@@ -145,9 +145,9 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     
     #commun quelque soit le mode de l'IA
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
-        poids+= 100000              
+        poids+= 1000000000              
     elif fenetre.count(adv) == 5: #l'adversaire gagne
-            poids -=100000
+            poids -=100000000
                      
    #selon le mode de l'IA             
     if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
@@ -253,13 +253,13 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
                     #break
         return coup, max #return coup,min??
 
-def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
+def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
     
     prises=prisepossible(Plateau_local, joueur_local)
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
-        return [None, poids_plateau(Plateau_local, joueur_local, 1)]
+        return [None, poids_plateau(Plateau_local, joueur_local, modeIA)]
 
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
     elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
@@ -268,7 +268,7 @@ def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(vide,case,Pcopy,joueur_local) #joue le coup
-                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le poids et pas le coup
+                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local), modeIA)[1] #on prend que le poids et pas le coup
                 if nouveau_score > maxi:
                     maxi = nouveau_score
                     coup = (vide,case)
@@ -283,7 +283,7 @@ def minimax_cyrian(Plateau_local, profondeur, alpha, beta, joueur_local):
             for case in poussepossible(vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(vide,case,Pcopy,joueur_local)
-                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local))[1] #on prend que le score et pas le coup
+                nouveau_score = minimax_cyrian(Pcopy, profondeur-1, alpha, beta, chg_joueur(joueur_local), modeIA)[1] #on prend que le score et pas le coup
                 if nouveau_score < mini:
                     mini = nouveau_score
                     coup = (vide,case)
@@ -390,8 +390,8 @@ def refresh():
 ##actions declenchées par le clique de souris 
 def clic(event):
     global joueur
+    global Plateau
     x,y = event.xdata,event.ydata #récupère les coord du clique
-     
 
     #Connexion du bouton "new game"
     if 1<x<4 and 5.2<y<5.8:
@@ -421,52 +421,54 @@ def clic(event):
                 refresh()
                 
                 if partie_finie(Plateau,joueur) != False: #si la partie est terminée
-                    if partie_finie(Plateau,joueur)==1:
-                        gagnant="croix gagne"
-                    else:
+                    if partie_finie(Plateau,joueur)==2:
                         gagnant="rond gagne"
+                    else:
+                        gagnant="croix gagne"
 
                     plt.text(1,-0.5,gagnant, fontsize=15, color='red')
                     
                 else: #si la partie n'est pas finie
                     #changement de tour
                     joueur = chg_joueur(joueur)
-                    print(minimax_cyrian(Plateau, 3, -10000000000, 100000000000, joueur))
+                    
+
 def clicIA(event):
     global joueur
     global Plateau
+    modeIA=0
     
     if event.key == 'a':
-        [(capture,pousse) , poids] = minimax_cyrian(Plateau, 3, -1000000000, 1000000000, joueur, 1)
-        capture_cube(capture, Plateau, joueur)
-        refresh()
-        pousse(capture,pousse,Plateau,joueur)
-        refresh()
-        joueur = chg_joueur(joueur)
+            modeIA = 1
     
     elif event.key == 'b':
-        capture, pousse, poids = minimax_cyrian(Plateau, 3, -1000000000, 1000000000, joueur, 2)
-        capture_cube(capture, Plateau, joueur)
-        refresh()
-        pousse(capture,pousse,Plateau,joueur)
-        refresh()
-        joueur = chg_joueur(joueur)
+            modeIA = 2
+    
+    if modeIA!=0:
+            ((vide,case) , poids) = (minimax_cyrian(Plateau, 2, -1000000000, 1000000000, joueur, modeIA)[k] for k in range(2))
+            capture_cube(vide, Plateau, joueur)
+            refresh()
+            pousse(vide,case,Plateau,joueur)    
+            refresh()
+            joueur = chg_joueur(joueur)
         
     elif event.key == 'c':
-        Plateau = IA_aleatoire(Plateau, joueur)
-        refresh()
-        joueur = chg_joueur(joueur)
-        if partie_finie(Plateau,joueur) != False: #si la partie est terminée
-            if partie_finie(Plateau,joueur)==1:
-                gagnant="rond gagne"
-            else:
-                gagnant="croix gagne"
+            Plateau = IA_aleatoire(Plateau, joueur)
+            refresh()
+            joueur = chg_joueur(joueur)
 
-            plt.text(1,-0.5,gagnant, fontsize=15, color='red')
+    if partie_finie(Plateau, joueur) != False:
+        if partie_finie(Plateau,joueur)==2:
+            gagnant="rond gagne"
+        else:
+            gagnant="croix gagne"
+
+        plt.text(1,-0.5,gagnant, fontsize=15, color='red')
     
-    
+
+        
 fig.canvas.mpl_connect('button_press_event', clic)
-
+fig.canvas.mpl_connect('key_press_event', clicIA)
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
