@@ -390,10 +390,8 @@ def refresh():
 ##actions declenchées par le clique de souris 
 def clic(event):
     global joueur
-    #if clique
     x,y = event.xdata,event.ydata #récupère les coord du clique
-    #else (clavier)
-    #x,y,x',y' = minimax()
+     
 
     #Connexion du bouton "new game"
     if 1<x<4 and 5.2<y<5.8:
@@ -435,9 +433,9 @@ def clic(event):
                     joueur = chg_joueur(joueur)
                     print(minimax_cyrian(Plateau, 3, -10000000000, 100000000000, joueur))
 
-
+    
 fig.canvas.mpl_connect('button_press_event', clic)
-fig.canvas.mpl_connect('keyboard_event', clic)
+
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
