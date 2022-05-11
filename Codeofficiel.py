@@ -409,7 +409,7 @@ def clic(event):
         testvide = np.where(Plateau == -1, 1,0) #renvoie une matrice avec des 1 là où il y a des -1 dans le plateau et des 0 sinon
         
         #Phase de capture
-        if testvide==np.zeros((5,5)):
+        if all(testvide)==0:
             print('capture')
             capture_cube(case,Plateau,joueur)
             refresh()
