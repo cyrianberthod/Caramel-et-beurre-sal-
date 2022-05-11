@@ -232,6 +232,64 @@ def creaarbre(plateau_fils, noeud_parent, jlocal, k): #au premier appel creanoeu
         for petit_fils in rg:
             creaarbre(petit_fils,fils,jlocal,k+1) #le petit-fils devient le fils, on avance d'un rang , au tour d'après le joueur doit être différent
 
+def coup_gagnant(Plateau_local, joueur_local): #est-ce que le coup va former un plateau gagnant ?
+    for P in explore_1tour(Plateau_local, joueur_local):
+        if partie_finie(P):
+            return True
+    return False
+
+def dernier_noeud(Plateau_local, joueur_local):
+    return coup_gagnant(Plateau_local, joueur_local) or coup_gagnant(Plateau_local, chg_joueur(joueur_local)) or len(prisepossible(Plateau_local)) == 0
+#manque argument entrée "joueur_local" pour prise possible().
+                     
+def minimax(Plateau_local, profondeur, alpha, beta, joueur_local):
+    prises_valides=prisepossible(Plateau_local, joueur_local)
+    partie_terminée = dernier_noeud(Plateau_local, joueur_local)
+    if profondeur == 0 or partie_terminée: 
+        if partie_terminée:
+            if coup_gagnant(Plateau_local, chg_joueur(joueur_local)):
+                return (None, -100000000000000)
+            elif coup_gagnant(Plateau_local,joueur_local):
+                return (None, 10000000000000)
+            else: #La partie est finie mais personne n'a gagné
+                return (None, 0)
+        else: #profondeur=0
+            return (None, poids_plateau(Plateau_local, chg_joueur(joueur_local), 1))
+    if joueur_local:
+        max = -math.inf
+        #vide = rd.choice(prises_valides)
+        #case = rd.choice(poussepossible(vide))
+        for vide in prises_valides:
+            for case in poussepossible(vide):
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
+                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, False)[1]  #modifier pour etre en accord avec arguments entrée fonction.
+                if nouveau_score > max:
+                    max = nouveau_score
+                    coup = (vide,case)
+               # alpha = max(alpha, value)
+                #if alpha >= beta:
+                  #  break
+        return coup, max
+
+    else: # Min player (avdersaire)
+        min = math.inf
+        for vide in prises_valides:
+            for case in poussepossible(vide):
+                Pcopy = np.copy(Plateau_local)
+                pousse(vide,case,Pcopy,joueur_local)
+                nouveau_score = minimax(Pcopy, depth-1, alpha, beta, True)[1]
+                if nouveau_score < min:
+                    min = nouveau_score
+                    coup = (vide,case)
+               # beta = min(beta, min)
+                #if alpha >= beta:
+                    #break
+        return coup, max #return coup,min??
+            
+            
+            
+            
 #creaarbre(Plateau,root,joueur,0)
 #print(tree.RenderTree(root).by_attr())
 
