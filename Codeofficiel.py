@@ -432,7 +432,38 @@ def clic(event):
                     #changement de tour
                     joueur = chg_joueur(joueur)
                     print(minimax_cyrian(Plateau, 3, -10000000000, 100000000000, joueur))
+def clicIA(event):
+    global joueur
+    global Plateau
+    
+    if event.key == 'a':
+        [(capture,pousse) , poids] = minimax_cyrian(Plateau, 3, -1000000000, 1000000000, joueur, 1)
+        capture_cube(capture, Plateau, joueur)
+        refresh()
+        pousse(capture,pousse,Plateau,joueur)
+        refresh()
+        joueur = chg_joueur(joueur)
+    
+    elif event.key == 'b':
+        capture, pousse, poids = minimax_cyrian(Plateau, 3, -1000000000, 1000000000, joueur, 2)
+        capture_cube(capture, Plateau, joueur)
+        refresh()
+        pousse(capture,pousse,Plateau,joueur)
+        refresh()
+        joueur = chg_joueur(joueur)
+        
+    elif event.key == 'c':
+        Plateau = IA_aleatoire(Plateau, joueur)
+        refresh()
+        joueur = chg_joueur(joueur)
+        if partie_finie(Plateau,joueur) != False: #si la partie est terminée
+            if partie_finie(Plateau,joueur)==1:
+                gagnant="rond gagne"
+            else:
+                gagnant="croix gagne"
 
+            plt.text(1,-0.5,gagnant, fontsize=15, color='red')
+    
     
 fig.canvas.mpl_connect('button_press_event', clic)
 
