@@ -1,43 +1,5 @@
-from pynput.mouse import controller, Button 
-mouse = Controller()
+import pynput.keyboard as pk
 
-# Read pointer position
-print('The current pointer position is {0}'.format(
-    mouse.position))
-
-# Set pointer position
-mouse.position = (10, 20)
-print('Now we have moved it to {0}'.format(
-    mouse.position))
-
-# Move pointer relative to current position
-mouse.move(5, -5)
-
-# Press and release
-mouse.press(Button.left)
-mouse.release(Button.left)
-
-# Double click; this is different from pressing and releasing
-# twice on macOS
-mouse.click(Button.left, 2)
-
-# Scroll two steps down
-mouse.scroll(0, 2)
-######
-import mouse
-import matplotlib.pyplot as plt
-
-fig=plt.figure()
-plt.xlim(-2,3)
-plt.ylim(-2,3)
-
-
-def testclick(event):
-    x,y=event.xdata,event.ydata
-    if 1<x<2 and y<0:
-        print("la chouette")
-
-mouse.move(1.2,-1)
-mouse.click()
-plt.show()
-fig.canvas.mpl_connect('button_press_event', testclick)
+clavier = pk.Controller()
+clavier.press("a")
+clavier.release("a")
