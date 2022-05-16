@@ -209,7 +209,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
-        return [None, poids_plateau(Plateau_local, joueur_local, modeIA)]
+        return [None, poids_plateau(Plateau_local, joueur, modeIA)]
 
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
     elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
