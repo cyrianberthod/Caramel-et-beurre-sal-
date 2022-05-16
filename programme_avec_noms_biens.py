@@ -19,7 +19,7 @@ def play():
     global Plateau
     Plateau=np.zeros((5,5))
     global joueur
-    joueur = rd.randint(1,2) #le joueur 1 ou le joueur 2 commence (hasard)
+    joueur = rd.randint(croix,rond) #le joueur 1 ou le joueur 2 commence (hasard)
 
 play()
 
