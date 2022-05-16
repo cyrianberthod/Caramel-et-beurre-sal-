@@ -422,3 +422,45 @@ fig.canvas.mpl_connect('key_press_event', clicIA)
 plt.interactive(True) 
 plt.pause(10000) #evite que la figure se ferme 
 plt.show(block=False) #evite les bugs 
+
+
+##tracer des graphes
+import matplotlib.pyplot as plt
+
+def simulIA(IA1, IA2):
+    global joueur
+    global Plateau
+    Plateau=np.zeros((5,5))
+    joueur = 1 #IA_1
+    modeIA = IA1
+    nbcoup=0
+    
+    fIA1= 0
+    fIA2= 0
+    feg= 0
+    
+    for plateau in explore_1tour(Plateau,1):
+        Plateau=plateau
+        n=len(explore_1tour(Plateau,1))
+        
+        while not partie_finie(Plateau,joueur) and nbcoup<100:
+            ((coord_vide,case) , poids) = (minimax(Plateau, 2, -1000000000, 1000000000, joueur, modeIA)[k] for k in range(2))
+            capture_cube(coord_vide, Plateau, joueur)
+            pousse(coord_vide,case,Plateau,joueur)    
+            joueur = chg_joueur(joueur)
+            if modeIA==IA1:
+                modeIA=IA2
+            else:
+                modeIA=IA1
+            nbcoup+=1
+            
+        if partie_finie(Plateau,joueur)==1:
+            fIA1+=1/n
+        elif partie_finie(Plateau,joueur)==2:
+            fIA2+=1/n
+        else:
+            feg+=1/n
+    
+    plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5)
+    plt.show()
+    
