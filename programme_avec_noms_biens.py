@@ -153,7 +153,7 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
         poids+= 1000000000              
     elif fenetre.count(adv) == 5: #l'adversaire gagne
-            poids -=100000000
+            poids -=100000000000
                      
    #selon le mode de l'IA             
     if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
@@ -347,7 +347,7 @@ def clic(event):
     if 1<x<4 and 5.2<y<5.8:
         play()
         refresh()
-        ax.texts=[ax.texts[k] for k in range(11)] #supprime les textes defini apres les 11 initiaux 
+        ax.texts=[ax.texts[k] for k in range(5)] #supprime les textes defini apres les 11 initiaux 
     
     #Au cours d'une partie
     else:
