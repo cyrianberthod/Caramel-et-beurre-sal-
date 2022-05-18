@@ -177,7 +177,7 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
         for k in range(n):
             if fenetre.count(adv) == k :
                 poids += (n-k)*10
-        return poids
+    return poids
 
 def poids_plateau(Plateau_local, joueurIA, mode_IA):
     P=Plateau_local
