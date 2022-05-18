@@ -392,11 +392,14 @@ def clicIA(event): #pour jouer avec une IA
             modeIA = 2
     
     if modeIA!=0:
+            deb=time.time()
             ((coord_vide,case) , poids) = (minimax(Plateau, 2, -1000000000, 1000000000, joueur, modeIA)[k] for k in range(2))
             capture_cube(coord_vide, Plateau, joueur)
             refresh()
             pousse(coord_vide,case,Plateau,joueur)    
             refresh()
+            fin=time.time()
+            print(fin-deb)
             joueur = chg_joueur(joueur)
         
     elif event.key == 'c':
