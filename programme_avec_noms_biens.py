@@ -103,35 +103,38 @@ def partie_finie(Plateau_local, joueur_local):
     adv=chg_joueur(joueur_local)
     V=0
     #colonnes gagnantes ?
-    for c in range(5):
-        colonne=[P[l,c] for l in range(5)]
-        if colonne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+    for c in range(n):
+        colonne=[P[l,c] for l in range(n)]
+        if colonne.count(adv)==n: #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
-        if colonne.count(joueur_local)==5: #le joueur a une colonne gagnante
+        if colonne.count(joueur_local)==n: #le joueur a une colonne gagnante
             V+=1
     #lignes gagnantes ?
-    for l in range(5):
-        ligne=[P[l,c] for c in range(5)]
-        if ligne.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+    for l in range(n):
+        ligne=[P[l,c] for c in range(n)]
+        if ligne.count(adv)==n : #le joueur a fait gagné l'adversaire, il a donc perdu
             return adv
-        if ligne.count(joueur_local)==5: #le joueur a une colonne gagnante
+        if ligne.count(joueur_local)==n: #le joueur a une colonne gagnante
             V+=1
     #diagonales gagnantes ?
-    diag_1=[P[k,k] for k in range (5)]
-    if diag_1.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+    diag_1=[P[k,k] for k in range (n)]
+    
+    if diag_1.count(adv)==n : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
-    if diag_1.count(joueur_local)==5: #le joueur a une colonne gagnante
+    if diag_1.count(joueur_local)==n: #le joueur a une colonne gagnante
             V+=1
-    diag_2=[P[4,0],P[3,1],P[2,2],P[1,3],P[0,4]]
-    if diag_2.count(adv)==5 : #le joueur a fait gagné l'adversaire, il a donc perdu
+            
+    diag_2=[P[k,(n-1)-k] for k in range(n)]
+    if diag_2.count(adv)==n : #le joueur a fait gagné l'adversaire, il a donc perdu
         return adv
-    if diag_2.count(joueur_local)==5: #le joueur a une colonne gagnante
+    if diag_2.count(joueur_local)==n: #le joueur a une colonne gagnante
             V+=1
 
     if V!=0:
         return joueur_local
     else: #personne n'a gagné
         return False
+
 
 
 #----------------------------------l'IA------------------------------------------------------------------------
