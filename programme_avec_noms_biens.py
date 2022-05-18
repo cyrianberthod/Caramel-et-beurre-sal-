@@ -162,33 +162,22 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     adv=chg_joueur(joueurIA)
     
     #commun quelque soit le mode de l'IA
-    if fenetre.count(joueurIA) == 5: #l'IA a une ligne gagnante
+    if fenetre.count(joueurIA) == n: #l'IA a une ligne gagnante
         poids+= 1000000           
-    elif fenetre.count(adv) == 5: #l'adversaire gagne
+    elif fenetre.count(adv) == n: #l'adversaire gagne
             poids -=1000000
                      
    #selon le mode de l'IA             
     if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
-        if fenetre.count(joueurIA) == 4 :
-            poids += 40
-        elif fenetre.count(joueurIA) == 3 :
-            poids += 30
-        elif fenetre.count(joueurIA) == 2 :
-            poids +=20
-        elif fenetre.count(joueurIA) == 1 :
-            poids +=10
+        for k in range(n):
+            if fenetre.count(joueurIA) == k :
+                poids += k*10
 
     elif mode_IA==2: #moins l'adversaire aligne de pions plus la fenêtre a un poids élevé
-        if fenetre.count(adv) == 4 :
-            poids += 10
-        elif fenetre.count(adv) == 3 :
-            poids += 20
-        elif fenetre.count(adv) == 2 :
-            poids += 30
-        elif fenetre.count(adv) == 1 :
-            poids +=40
-                     
-    return poids
+        for k in range(n):
+            if fenetre.count(adv) == k :
+                poids += (n-k)*10
+        return poids
 
 def poids_plateau(Plateau_local, joueurIA, mode_IA):
     P=Plateau_local
