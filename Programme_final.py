@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
-import time 
+import time
 
 ##Définition des variables globales 
 #correspondance objet/matrice
@@ -19,7 +19,7 @@ def chg_joueur(joueur_local):
     return joueur_local
     
 #choix de la taille du plateau 
-n=5
+n=10
 
 ##Mise en place du jeu 
 
@@ -37,7 +37,7 @@ def coord_bordure():
     L4=[(k,n-1) for k in range(1,n-1)]
     L=L1+L2+L3+L4
     return L
-    
+coord_bordure=coord_bordure() 
 #Peut-on effectueur l'action ?
 
 def capture_possible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
