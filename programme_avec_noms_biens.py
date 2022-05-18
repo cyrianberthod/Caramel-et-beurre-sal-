@@ -183,17 +183,17 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
     P=Plateau_local
     poids= 0
     #poids colonnes
-    for c in range(5):
-        colonne=[P[l,c] for l in range(5)] #la fenêtre = listes des valeurs sur la colonne c
+    for c in range(n):
+        colonne=[P[l,c] for l in range(n)] #la fenêtre = listes des valeurs sur la colonne c
         poids+=poids_fenetre(colonne,joueurIA, mode_IA)
     #poids lignes
-    for l in range(5):
-        ligne=[P[l,c] for c in range(5)]
+    for l in range(n):
+        ligne=[P[l,c] for c in range(n)]
         poids+=poids_fenetre(ligne,joueurIA, mode_IA)
     #poids diagonales
-    diag_1=[P[k,k] for k in range (5)]
+    diag_1=[P[k,k] for k in range (n)]
     poids+=poids_fenetre(diag_1,joueurIA, mode_IA)
-    diag_2=[P[4,0],P[3,1],P[2,2],P[1,3],P[0,4]]
+    diag_2=[P[k,(n-1)-k] for k in range(n)]
     poids+=poids_fenetre(diag_2,joueurIA, mode_IA)
 
     return poids
