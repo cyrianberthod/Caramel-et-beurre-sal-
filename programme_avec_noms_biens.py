@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as rd
 #on pose l=ligne et c=colonne
-coord_bordure=[(0, 0), (0, 1), (0, 2), (0, 3), (0, 4), (4, 0), (4, 1), (4, 2), (4, 3), (4, 4), (1, 0), (2, 0), (3, 0), (1, 4), (2, 4), (3, 4)]
+n=5
 def coord_bordure(n):
     L1=[(0,k) for k in range(n)]
     L2=[(n-1,k) for k in range(n)]
@@ -11,6 +11,7 @@ def coord_bordure(n):
     L4=[(k,n-1) for k in range(1,n-1)]
     L=L1+L2+L3+L4
     return L
+coord_bordure = coord_bordure(n)
 
 
 #joueurs
