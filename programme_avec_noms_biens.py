@@ -56,10 +56,10 @@ def capture_cube(case, Plateau_local, joueur): #capture le cube en position case
 ##Peut-on pousser ici ?
 def poussepossible(coord_vide): #renvoie liste des coorconnées des posi° où on peut pousser
     l,c = coord_vide
-    A=[(0,0),(0,4),(4,0),(4,4)] #listes des coord des angles
+    A=[(0,0),(0,n-1),(n-1,0),(n-1,n-1)] #listes des coord des angles
     if coord_vide in A: #si le pion a été pris dans un angle : 2 possiblités
-      return [(abs(l-4),c),(l,abs(4-c))] #on fixe l ou c
-    L=[(l,0),(l,4),(0,c),(4,c)] #si le pion n'a pas été pris dans un angle : 4 posibilités
+      return [(abs(l-(n-1)),c),(l,abs((n-1)-c))] #on fixe l ou c
+    L=[(l,0),(l,n-1),(0,c),(n-1,c)] #si le pion n'a pas été pris dans un angle : 4 posibilités
     L.remove(coord_vide)  #on ne peut pas laisser le pion où on l'a pris
     return L
 
