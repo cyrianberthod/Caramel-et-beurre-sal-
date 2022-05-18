@@ -188,7 +188,8 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
         for k in range(n):
             if fenetre.count(adv) == k :
                 poids += (n-k)*10
-        return poids
+    
+    return poids
 
 def poids_plateau(Plateau_local, joueurIA, mode_IA):
     P=Plateau_local
@@ -312,7 +313,7 @@ def refresh():
     
     for cube in Lcroix:
         yc, xc = cube
-        yc = n-yc #passage de la matrice a la figure
+        yc = n-1-yc #passage de la matrice a la figure
         dessinindetermine = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinindetermine)
         branche1 = plt.Rectangle((xc+0.25,yc+0.35), width=0.1, height=0.6, angle=-45, facecolor='black') # croix= 2 rectangles avec angle 45°
@@ -321,14 +322,14 @@ def refresh():
         ax.add_patch(branche2)
     for cube in Lrond:
         yc, xc = cube
-        yc = 4-yc #passage de la matrice a la figure
+        yc = n-1-yc #passage de la matrice a la figure
         dessinindetermine = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinindetermine)
         dessinrond = plt.Circle((xc+0.5,yc+0.5), radius=0.3, facecolor='black')
         ax.add_patch(dessinrond)
     for cube in Lindetermine:
         yc, xc = cube
-        yc = 4-yc #passage de la matrice a la figure
+        yc = n-1-yc #passage de la matrice a la figure
         dessinindetermine = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinindetermine)
 
