@@ -344,15 +344,15 @@ def clic(event):
     x,y = event.xdata,event.ydata #récupère les coord du clique
 
     #Connexion du bouton "new game"
-    if 1<x<4 and 5.2<y<5.8:
+    if 1<x<n-1 and n+0.2<y<n+0.8:
         play()
         refresh()
-        ax.texts=[ax.texts[k] for k in range(5)] #supprime les textes defini apres les 11 initiaux 
+        ax.texts=[ax.texts[k] for k in range(5)] #supprime les textes defini apres les 5 initiaux 
     
     #Au cours d'une partie
     else:
         c = int(x-x%1) #passage de la figure à la matrice
-        l = int(4-(y-y%1))
+        l = int((n-1)-(y-y%1))
         case = (l,c)
         testvide = np.where(Plateau == -1, 1,0) #renvoie une matrice avec des 1 là où il y a des -1 dans le plateau et des 0 sinon
         
