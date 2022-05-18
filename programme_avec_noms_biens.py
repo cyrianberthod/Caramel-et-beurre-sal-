@@ -430,7 +430,7 @@ import matplotlib.pyplot as plt
 def simulIA(IA1, IA2):
     global joueur
     global Plateau
-    Plateau=np.zeros((5,5))
+    Plateau=np.zeros((n,n))
     joueur = 1 #IA_1
     modeIA = IA1
     nbcoup=0
@@ -441,7 +441,7 @@ def simulIA(IA1, IA2):
     
     for plateau in explore_1tour(Plateau,1):
         Plateau=plateau
-        n=len(explore_1tour(Plateau,1))
+        N=len(explore_1tour(Plateau,1))
         
         while not partie_finie(Plateau,joueur) and nbcoup<100:
             ((coord_vide,case) , poids) = (minimax(Plateau, 2, -1000000000, 1000000000, joueur, modeIA)[k] for k in range(2))
@@ -455,12 +455,15 @@ def simulIA(IA1, IA2):
             nbcoup+=1
             
         if partie_finie(Plateau,joueur)==1:
-            fIA1+=1/n
+            fIA1+=1/N
         elif partie_finie(Plateau,joueur)==2:
-            fIA2+=1/n
+            fIA2+=1/N
         else:
-            feg+=1/n
+            feg+=1/N
     
     plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5)
+    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
+    labels= ["IA1","IA2","égualité"]
+    plt.legend(handles, labels)
     plt.show()
     
