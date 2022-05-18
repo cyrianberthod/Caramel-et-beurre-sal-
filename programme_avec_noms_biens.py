@@ -247,26 +247,25 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
 #------------------------------------------------------Interface Graphique-----------------------------------------------------------
 
 ##figure 
-#xc,yc correspont au sommet bas gauche de chaque case dans le graphique
+#xc,yc correspondent au sommet bas gauche de chaque case dans le graphique
 fig = plt.figure()
 ax = plt.axes(aspect=1) #repère orthonormé
-plt.xlim(-4,9) 
-plt.ylim(-1,6)
+plt.xlim(-(n-1),n+4) 
+plt.ylim(-1,n+1)
 plt.axis('off')
 plt.title('QUIXO')
-contour = plt.Rectangle((-1,-1),7,7,fc=(0.8,0.8,0.8)) #fc=face colour : couleur de ce qu'on trace
-fond = plt.Rectangle((-4,-1),13,7,fc=(0.5,0.5,0.5))
+contour = plt.Rectangle((-1,-1),n+2,n+2,fc=(0.8,0.8,0.8)) #fc=face colour : couleur de ce qu'on trace
+fond = plt.Rectangle((-4,-1),n+8,n+2,fc=(0.5,0.5,0.5))
 ax.add_patch(fond)
 ax.add_patch(contour)
-fond_plateau = plt.Rectangle((0,0),5,5, fc=(0.4,0.25,0.2))
+fond_plateau = plt.Rectangle((0,0),n,n, fc=(0.4,0.25,0.2))
 ax.add_patch(fond_plateau)
 
 #boutons
-bouton_newgame=plt.Rectangle((1,5.2),3,0.6,fc='black') #bouton new game
+bouton_newgame=plt.Rectangle((1,n+0.2),n-2,0.6,fc='black') #bouton new game
 ax.add_patch(bouton_newgame)
-text_newgame=plt.text(2.5,5.5,'New Game',fontsize=8,horizontalalignment='center',verticalalignment='center',color='w')
-
-text_joueur1=plt.text(-2.5,5.5,'Consigne',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+text_newgame=plt.text(n/2,n+0.5,'New Game',fontsize=8,horizontalalignment='center',verticalalignment='center',color='w')
+text_joueur1=plt.text(-2.5,n+0.5,'Consigne',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
 #text_joueur2=plt.text(7.5,5.5,'Joueur 2',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
 
 #for i in [-3.5,6.5]:
@@ -275,16 +274,16 @@ text_joueur1=plt.text(-2.5,5.5,'Consigne',fontsize=12,horizontalalignment='cente
         #ax.add_patch(b)
 #for i in [-2.5,7.5]:
     #text_utilisateur=plt.text(i,4.3,'Utilisateur',fontsize=8,horizontalalignment='center',verticalalignment='center',color='white')
-text_IArand=plt.text(-2.5,3.3,'IA aleatoire taper c',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
-text_IAoff=plt.text(-2.5,2.3,'IA offensive taper a',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
-text_IAdef=plt.text(-2.5,1.3,'IA defensive taper b',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
+text_IArand=plt.text(-2.5,2*n/3,'IA aleatoire taper c',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
+text_IAoff=plt.text(-2.5,n/2,'IA offensive taper a',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
+text_IAdef=plt.text(-2.5,n/4,'IA defensive taper b',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
 
 
 
-for k in range (-1,5): #grille
+for k in range (-1,n): #grille
     h=k+0.975
-    lignev = plt.Rectangle((h,0),0.05,5,fc=(0.8,0.8,0.8))
-    ligneh = plt.Rectangle((0,h),5,0.05,fc=(0.8,0.8,0.8))
+    lignev = plt.Rectangle((h,0),0.05,n,fc=(0.8,0.8,0.8))
+    ligneh = plt.Rectangle((0,h),n,0.05,fc=(0.8,0.8,0.8))
     ax.add_patch(lignev)
     ax.add_patch(ligneh)
 
@@ -296,8 +295,8 @@ def refresh():
     Lcroix=[]
     Lrond=[]
     global coord_vide #nécessaire pour pour l'appeler dans clic
-    for l in range(5):
-        for c in range(5):
+    for l in range(n):
+        for c in range(n):
             case=(l,c)
             if P[l,c]==indetermine:
                 Lindetermine.append(case)
@@ -317,7 +316,7 @@ def refresh():
     
     for cube in Lcroix:
         yc, xc = cube
-        yc = 4-yc #passage de la matrice a la figure
+        yc = n-yc #passage de la matrice a la figure
         dessinindetermine = plt.Rectangle((xc+0.025,yc+0.025), width=0.95, height=0.95, facecolor=(0.4,0.25,0.2))
         ax.add_patch(dessinindetermine)
         branche1 = plt.Rectangle((xc+0.25,yc+0.35), width=0.1, height=0.6, angle=-45, facecolor='black') # croix= 2 rectangles avec angle 45°
