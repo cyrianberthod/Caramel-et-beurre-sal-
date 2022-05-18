@@ -82,14 +82,14 @@ def pousse(coord_vide, case, Plateau_local, joueur):
             for k in range (cv,0,-1):
                 P[l,k]=P[l,k-1]
         else : 
-            for k in range (cv,4):
+            for k in range (cv,n-1):
                 P[l,k]=P[l,k+1]
     elif c == cv: #peut etre remplacer par else 
         if l < lv:
             for k in range (lv,0,-1):
                 P[k,c]=P[k-1,c]
         else :
-            for k in range (lv,4):
+            for k in range (lv,n-1):
                 P[k,c]=P[k+1,c]
     #le pion du joueur se retrouve à la position de pousse
     P[l,c] = joueur     
