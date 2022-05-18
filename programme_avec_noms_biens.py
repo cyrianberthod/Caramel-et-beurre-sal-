@@ -198,7 +198,7 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 
     return poids
 
-def prisepossible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
+def capture_possible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
     L=[]
     for coord in coord_bordure:
         if Plateau_local[coord]==joueur_local or Plateau_local[coord]==0:  
@@ -206,7 +206,7 @@ def prisepossible(Plateau_local, joueur_local): #peut etre plus logique d'appele
     return L 
                      
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
-    prises=prisepossible(Plateau_local, joueur_local)
+    captures=capture_possible(Plateau_local, joueur_local)
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
@@ -215,7 +215,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
     elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
         maxi = -np.inf #moins l'infini 
-        for coord_vide in prises:
+        for coord_vide in captures:
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(coord_vide,case,Pcopy,joueur_local) #joue le coup
@@ -230,7 +230,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
     
     else: #on fait jouer l'adversaire virtuellement et on essaye de faire le pire coup possible
         mini = np.inf
-        for coord_vide in prises:
+        for coord_vide in captures:
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(coord_vide,case,Pcopy,joueur_local)
