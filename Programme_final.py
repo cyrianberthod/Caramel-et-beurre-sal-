@@ -256,7 +256,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
 #figure
 fig = plt.figure()
 ax = plt.axes(aspect=1) #repère orthonormé
-plt.xlim(-(n-1),n+4) 
+plt.xlim(-4,n+4) 
 plt.ylim(-1,n+1)
 plt.axis('off')
 plt.title('QUIXO')
@@ -308,7 +308,7 @@ def refresh():
             elif P[l,c]==vide:
                 coord_vide = case #pas besoin de liste, maximum une case coord_vide
                 yc, xc = coord_vide 
-                yc = 4-yc #passage de la matrice a la figure
+                yc = n-1-yc #passage de la matrice a la figure
                 dessinvide = plt.Rectangle((xc,yc), width=1, height=1, facecolor=(0.8,0.8,0.8)) #width=largeur et height=longueur
                 ax.add_patch(dessinvide)
     
