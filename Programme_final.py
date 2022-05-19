@@ -30,14 +30,14 @@ def play():
     joueur = rd.randint(croix,rond) #le joueur 1 ou le joueur 2 commence (hasard)
 play()
 
-def coord_bordure():
+def set_coord_bordure():
     L1=[(0,k) for k in range(n)]
     L2=[(n-1,k) for k in range(n)]
     L3=[(k,0) for k in range(1,n-1)]
     L4=[(k,n-1) for k in range(1,n-1)]
     L=L1+L2+L3+L4
     return L
-coord_bordure=coord_bordure() 
+coord_bordure=set_coord_bordure() 
 #Peut-on effectueur l'action ?
 
 def capture_possible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
