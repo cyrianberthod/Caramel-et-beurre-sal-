@@ -1,7 +1,7 @@
 ##Importations
 import numpy as np
-import matplotlib.pyplot as plt
 import random as rd
+import matplotlib.pyplot as plt
 import time
 
 ##Définition des variables globales 
@@ -40,10 +40,10 @@ def set_coord_bordure():
 coord_bordure=set_coord_bordure() 
 #Peut-on effectueur l'action ?
 
-def capture_possible(Plateau_local, joueur_local): #peut etre plus logique d'appeler cette fonction "capture_possible" au vu de la fonction capture_cube)
+def capture_possible(Plateau_local, joueur_local):
     L=[]
     for coord in coord_bordure:
-        if Plateau_local[coord]==joueur_local or Plateau_local[coord]==0:  
+        if Plateau_local[coord]==joueur_local or Plateau_local[coord]==indetermine:  
             L.append(coord)  
     return L 
     
@@ -66,16 +66,12 @@ def pousseok(coord_vide,case): #case = coordonnées de là où l'on veut pousser
 
 #Faire l'action 
 
-def capture_cube(case, Plateau_local, joueur): #capture le cube en position case si cela est possible
-    P=Plateau_local
+def capture_cube(case, Plateau, joueur): #capture le cube en position case si cela est possible
+    P=Plateau
     l,c=case
-    positions_possibles=[]# récupère les coordonnées (i,j) de tout les endroits ou le joueur peut jouer un nouveau coup , en bordure!
-    for position in coord_bordure:
-        lp,cp=position #lp=ligne et cp=colonne du doublet dans position
-        if P[lp,cp]==indetermine or P[lp,cp]==joueur:
-             positions_possibles.append((lp,cp))
-    if case in positions_possibles: #verifie que  la position est valide
-        P[l,c]=vide #on enlève le cube, -1=case coord_vide
+    positions_possibles=capture_possible(Plateau, joueur)
+    if case in positions_possibles: 
+        P[l,c]=vide #on enlève le cube
         return True
     return False
 
