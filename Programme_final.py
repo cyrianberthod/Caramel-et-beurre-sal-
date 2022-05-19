@@ -47,9 +47,9 @@ def capture_possible(Plateau_local, joueur_local):
             L.append(coord)  
     return L 
     
-def poussepossible(coord_vide): #renvoie liste des coorconnées des posi° où on peut pousser
+def poussepossible(coord_vide): #renvoie liste des coordonnées des positions où l'on peut pousser à partir de l'emplacement de capture du pion
     l,c = coord_vide
-    A=[(0,0),(0,n-1),(n-1,0),(n-1,n-1)] #listes des coord des angles
+    A=[(0,0),(0,n-1),(n-1,0),(n-1,n-1)] #coordonnées des angles
     if coord_vide in A: #si le pion a été pris dans un angle : 2 possiblités
       return [(abs(l-(n-1)),c),(l,abs((n-1)-c))] #on fixe l ou c
     L=[(l,0),(l,n-1),(0,c),(n-1,c)] #si le pion n'a pas été pris dans un angle : 4 posibilités
