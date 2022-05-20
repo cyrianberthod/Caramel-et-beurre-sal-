@@ -208,8 +208,7 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
     return poids
 
 def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
-    captures=capture_possible(Plateau_local, joueur_local)
-
+    
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
         return [None, poids_plateau(Plateau_local, joueur, modeIA)]
@@ -217,7 +216,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
     elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
         maxi = -np.inf #moins l'infini 
-        for coord_vide in captures:
+        for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(coord_vide,case,Pcopy,joueur_local) #joue le coup
