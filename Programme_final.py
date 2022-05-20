@@ -231,7 +231,7 @@ def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
     
     else: #on fait jouer l'adversaire virtuellement et on essaye de faire le pire coup possible
         mini = np.inf
-        for coord_vide in captures:
+        for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
                 pousse(coord_vide,case,Pcopy,joueur_local)
