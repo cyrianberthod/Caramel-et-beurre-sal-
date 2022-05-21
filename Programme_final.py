@@ -225,7 +225,7 @@ def minimax(Plateau_local, joueur_local, profondeur, modeIA, alpha, beta):
         return [None, poids_plateau(Plateau_local, joueur, modeIA)]
 
     #On est pas au dernier rang donc on appelle la fonction à la profondeur-1 (récursivité)    
-    elif joueur_local==joueur: #on fait jouer le joueur virtuellement et on essaye de faire le meilleur coup possible
+    elif joueur_local==joueur: #on fait jouer le joueur virtuellement
         maxi = -np.inf #moins l'infini 
         for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
@@ -240,7 +240,7 @@ def minimax(Plateau_local, joueur_local, profondeur, modeIA, alpha, beta):
                     break
         return [coup, maxi]
     
-    else: #on fait jouer l'adversaire virtuellement et on essaye de faire le pire coup possible
+    else: #on prédit le coup de l'adversaire virtuellement
         mini = np.inf
         for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
