@@ -5,13 +5,19 @@ import matplotlib.pyplot as plt
 import time
 
 ##Définition des variables globales 
+
 #correspondance objet/matrice
 croix=1
 rond=2
 indetermine=0
 vide=-1
-    
+
+#mode IA
+OFFENSIF=1
+DEFENSIF=2
+
 def chg_joueur(joueur_local):
+    """renvoie l'adversaire du joueur entré en argument"""
     if joueur_local==croix:
         joueur_local=rond
     else:
@@ -24,6 +30,7 @@ n=10
 ##Mise en place du jeu 
 
 def play():
+    """initialisation du plateau de jeu et choix du joueur qui commence"""
     global Plateau
     Plateau=np.zeros((n,n))
     global joueur
@@ -31,6 +38,7 @@ def play():
 play()
 
 def set_coord_bordure():
+    """renvoie la liste des coordonées matricielles de la bordure du plateau"""
     L1=[(0,k) for k in range(n)]
     L2=[(n-1,k) for k in range(n)]
     L3=[(k,0) for k in range(1,n-1)]
@@ -41,13 +49,15 @@ coord_bordure=set_coord_bordure()
 #Peut-on effectueur l'action ?
 
 def capture_possible(Plateau_local, joueur_local):
+    """Prend en argument un plateau et un joueur et renvoie la liste des coordonnées des cubes que le joueur peut capturer"""
     L=[]
     for coord in coord_bordure:
         if Plateau_local[coord]==joueur_local or Plateau_local[coord]==indetermine:  
             L.append(coord)  
     return L 
     
-def poussepossible(coord_vide): #renvoie liste des coordonnées des positions où l'on peut pousser à partir de l'emplacement de capture du pion
+def poussepossible(coord_vide): 
+    """Prend en argument les coordonnées de la case vide et renvoie la liste des coordonnées où la pousse est possible"""
     l,c = coord_vide
     A=[(0,0),(0,n-1),(n-1,0),(n-1,n-1)] #coordonnées des angles
     if coord_vide in A: #si le pion a été pris dans un angle : 2 possiblités
@@ -56,26 +66,22 @@ def poussepossible(coord_vide): #renvoie liste des coordonnées des positions o�
     L.remove(coord_vide)  #on ne peut pas laisser le pion où on l'a pris
     return L
 
-def pousseok(coord_vide,case): #case = coordonnées de là où l'on veut pousser
-    Lpos=poussepossible(coord_vide) #liste des positions de pousse possibles
-    for k in Lpos:
-        if case==k:  #si l'endroit où le joueur veut poser est dans Lposs
-            return True
-    return False
-    
+def pousseok(coord_vide,case):
+    """Prend en arguments les coordonnées de la case vide et de la case où l'on veut pousser et renvoit un booléen"""
+    return (case in poussepossible(coord_vide)) #liste des positions de pousse possibles
+
 
 #Faire l'action 
 
-def capture_cube(case, Plateau, joueur): #capture le cube en position case si cela est possible
-    P=Plateau
+def capture_cube(Plateau_local, joueur, case):
+    """Prend en argument un plateau, un joueur et les coordonnées de le case où le joueur veut capture puis capture"""
+    P=Plateau_local
     l,c=case
-    positions_possibles=capture_possible(Plateau, joueur)
-    if case in positions_possibles: 
+    if case in capture_possible(P, joueur): 
         P[l,c]=vide #on enlève le cube
-        return True
-    return False
 
-def pousse(coord_vide, case, Plateau_local, joueur):
+def pousse(Plateau_local, joueur, coord_vide, case):
+    """Prend en argument un plateau, un joueur, les coordonnées de le case où il souhaite pousser et celles de la case vide puis pousse """
     P = Plateau_local
     l,c = case #position de la case de pose
     lv,cv = coord_vide #position de la case coord_vide
@@ -101,6 +107,7 @@ def pousse(coord_vide, case, Plateau_local, joueur):
 #La partie est-elle finie ?
 
 def partie_finie(Plateau_local, joueur_local):
+    """Prend en argument plateau et joueur : renvoie le gagnant si la partie est finie, False sinon"""
     P=Plateau_local
     adv=chg_joueur(joueur_local)
     V=0
@@ -144,12 +151,14 @@ def partie_finie(Plateau_local, joueur_local):
 #IA sans stratégie 
 
 def IA_aleatoire(Plateau_local, joueurIA):
+    """Joue au hasard"""
     coup = rd.choice(explore_1tour(Plateau_local, joueurIA)) #choisit un terme 
     return coup
     
 #IA prévoyant les coups possible 
 
 def explore_1tour(Plateau_local, joueur_local):
+    """Prend en argument un plateau et un joueur : renvoie la liste des plateaux possibles pour le joueur au tour suivant""" 
     all_possibilities=[]
     #choisi la case coord_vide
     for coord_vide in coord_bordure : 
@@ -164,8 +173,8 @@ def explore_1tour(Plateau_local, joueur_local):
     return all_possibilities
 
 
-def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg du plateau
-# 1 : mode offensive 2: mode defensif
+def poids_fenetre(fenetre, joueurIA, mode_IA):
+    """"Pour un alignement de n cases (=fenêtre) renvoie un entier (=poids) d'autant plus grand que la fenêtre est avantageuse pour le joueur"""
     poids= 0
     adv=chg_joueur(joueurIA)
     
@@ -176,12 +185,12 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
             poids -=1000000
                      
    #selon le mode de l'IA             
-    if mode_IA==1:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
+    if mode_IA==OFFENSIF:#plus l'IA aligne de pions plus la fenêtre a un poids élevé
         for k in range(n):
             if fenetre.count(joueurIA) == k :
                 poids += k*10
 
-    elif mode_IA==2: #moins l'adversaire aligne de pions plus la fenêtre a un poids élevé
+    elif mode_IA==DEFENSIF: #moins l'adversaire aligne de pions plus la fenêtre a un poids élevé
         for k in range(n):
             if fenetre.count(adv) == k :
                 poids += (n-k)*10
@@ -189,6 +198,7 @@ def poids_fenetre(fenetre, joueurIA, mode_IA): #joueurIA = celui qui joue au rg 
     return poids
 
 def poids_plateau(Plateau_local, joueurIA, mode_IA):
+    """Retourne le poids du plateau par rapport au joueur et à sa stratégie de jeu (mode_IA) """ 
     P=Plateau_local
     poids= 0
     #poids colonnes
@@ -207,7 +217,8 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
 
     return poids
 
-def minimax(Plateau_local, profondeur, alpha, beta, joueur_local, modeIA):
+def minimax(Plateau_local, profondeur, joueur_local, modeIA, alpha, beta):
+    """Parcours de manière récursive l'arbre des possibilités de jeu à une profondeur donnée et retourne le coup le plus avantageux pour le joueur et son poids"""
     
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
@@ -283,6 +294,7 @@ for k in range (-1,n):
 
 #mise à jour de la figure
 def refresh(): 
+    """Actualise l'interface graphique à partir de la matrice plateau"""
     P=Plateau
     Lindetermine=[]
     Lcroix=[]
@@ -332,7 +344,8 @@ def refresh():
 
 #actions declenchées par le clique de souris 
 
-def clic(event): #pour un joueur réel 
+def clic(event):
+    """Déclenche une série d'action à partir du clique du joueur sur l'interface graphique"""
     global joueur
     global Plateau
     x,y = event.xdata,event.ydata #récupère les coord du clique
@@ -378,6 +391,7 @@ def clic(event): #pour un joueur réel
                     
 
 def clicIA(event): #pour jouer avec une IA
+    """Déclenche le jeu d'une IA selon la touche du clavier pressée"""
     global joueur
     global Plateau
     modeIA=0
@@ -425,7 +439,8 @@ plt.show(block=False) #evite les bugs
 
 #comparaison des IA 
 
-def simulIA(IA1, IA2): #prend en entrée le mode des 2 IA dans l'ordre de jeu 
+def simulIA(IA1, IA2): 
+    """Prend en entrée le mode de 2 IA et affiche les fréquences de victoires de chacune"""
     global joueur
     global Plateau
     Plateau=np.zeros((n,n))
@@ -437,7 +452,7 @@ def simulIA(IA1, IA2): #prend en entrée le mode des 2 IA dans l'ordre de jeu
     fIA2= 0
     feg= 0
     
-    for plateau in explore_1tour(Plateau,1):
+    for plateau in explore_1tour(Plateau,1): #on test tous les 1er coups possibles différents 
         Plateau=plateau
         N=len(explore_1tour(Plateau,1))
         
