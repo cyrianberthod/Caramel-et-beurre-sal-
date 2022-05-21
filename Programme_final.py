@@ -25,7 +25,7 @@ def chg_joueur(joueur_local):
     return joueur_local
     
 #choix de la taille du plateau 
-n=10
+n=4
 
 ##Mise en place du jeu 
 
@@ -168,7 +168,7 @@ def explore_1tour(Plateau_local, joueur_local):
             for case in coord_bordure:
                if pousseok(coord_vide, case): 
                   P_copie2=np.copy(P_copie) #on crée un nv plateau par possibilité de pousse
-                  pousse(coord_vide,case,P_copie2,joueur_local)
+                  pousse(P_copie2,joueur_local,coord_vide,case)
                   all_possibilities.append(P_copie2) #ajoute le plateau virtuel une fois le coup joué
     return all_possibilities
 
@@ -230,7 +230,7 @@ def minimax(Plateau_local, joueur_local, profondeur, modeIA, alpha, beta):
         for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
-                pousse(coord_vide,case,Pcopy,joueur_local) #joue le coup
+                pousse(Pcopy,joueur_local,coord_vide,case) #joue le coup
                 nouveau_score = minimax(Pcopy, chg_joueur(joueur_local), profondeur-1, modeIA, alpha, beta)[1] #on prend que le poids et pas le coup
                 if nouveau_score > maxi:
                     maxi = nouveau_score
@@ -245,8 +245,8 @@ def minimax(Plateau_local, joueur_local, profondeur, modeIA, alpha, beta):
         for coord_vide in capture_possible(Plateau_local, joueur_local):
             for case in poussepossible(coord_vide):
                 Pcopy = np.copy(Plateau_local)
-                pousse(coord_vide,case,Pcopy,joueur_local)
-                nouveau_score = minimax(Pcopy, chg_joueur(joueur_local), profondeur-1, modeIA, alpha, beta), modeIA)[1] #on prend que le score et pas le coup
+                pousse(Pcopy,joueur_local,coord_vide,case)
+                nouveau_score = minimax(Pcopy, chg_joueur(joueur_local), profondeur-1,modeIA, alpha, beta)[1] #on prend que le score et pas le coup
                 if nouveau_score < mini:
                     mini = nouveau_score
                     coup = (coord_vide,case)
@@ -373,7 +373,7 @@ def clic(event):
         #Phase de pousse
         else: #le cube à été capturé
             if pousseok(coord_vide,case):
-                pousse(coord_vide,case,Plateau,joueur)
+                pousse(Plateau,joueur,coord_vide,case)
                 print('pose')
                 refresh()
                 
@@ -407,7 +407,7 @@ def clicIA(event): #pour jouer avec une IA
             ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
             capture_cube(Plateau, joueur, coord_vide)
             refresh()
-            pousse(coord_vide,case,Plateau,joueur)    
+            pousse(Plateau,joueur,coord_vide,case)    
             refresh()
             fin=time.time()
             print(fin-deb)
@@ -459,7 +459,7 @@ def simulIA(IA1, IA2):
         while not partie_finie(Plateau,joueur) and nbcoup<100:
             ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
             capture_cube(Plateau, joueur,coord_vide)
-            pousse(coord_vide,case,Plateau,joueur)    
+            pousse(Plateau,joueur,coord_vide,case)    
             joueur = chg_joueur(joueur)
             if modeIA==IA1:
                 modeIA=IA2
