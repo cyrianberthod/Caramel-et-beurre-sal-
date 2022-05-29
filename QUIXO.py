@@ -25,7 +25,7 @@ def chg_joueur(joueur_local):
     return joueur_local
 
 #choix de la taille du plateau
-n=4
+n=5
 
 ##Mise en place du jeu
 
