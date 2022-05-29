@@ -476,6 +476,6 @@ def simulIA(IA1, IA2):
     
     plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5)
     handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
-    labels= ["IA1","IA2","égualité"]
+    labels= ["IA1","IA2","égalité"]
     plt.legend(handles, labels)
     plt.show()
