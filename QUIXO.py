@@ -209,7 +209,7 @@ def poids_plateau(Plateau_local, joueurIA, mode_IA):
     return poids
 
 def minimax(Plateau_local, joueur_local, profondeur, modeIA, alpha, beta):
-    """Parcours de manière récursive l'arbre des possibilités de jeu à une profondeur donnée et retourne le coup le plus avantageux pour le joueur et son poids"""
+    """Parcours de manière récursive l'arbre des possibilités de jeu jusqu'à une profondeur donnée et retourne le coup le plus avantageux pour le joueur et son poids"""
 
     #On commence par retourner le poids du plateau dans le cas ou on est au dernier rang
     if partie_finie(Plateau_local, joueur_local)!=False or profondeur==0:
