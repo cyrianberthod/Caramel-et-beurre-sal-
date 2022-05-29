@@ -76,7 +76,7 @@ def pousseok(coord_vide,case):
 #Faire l'action
 
 def capture_cube(Plateau_local, joueur, case):
-    """Prend en argument un plateau, un joueur et les coordonnées de le case où le joueur veut capture puis capture"""
+    """Prend en argument un plateau, un joueur et les coordonnées de la case où le joueur veut capture puis capture"""
     P=Plateau_local
     l,c=case
     if case in capture_possible(P, joueur):
