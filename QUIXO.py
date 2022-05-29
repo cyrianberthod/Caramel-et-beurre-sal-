@@ -83,7 +83,7 @@ def capture_cube(Plateau_local, joueur, case):
         P[l,c]=vide #on enlève le cube
 
 def pousse(Plateau_local, joueur, coord_vide, case):
-    """Prend en argument un plateau, un joueur, les coordonnées de le case où il souhaite pousser et celles de la case vide puis pousse """
+    """Prend en argument un plateau, un joueur, les coordonnées de la case où il souhaite pousser et celles de la case vide puis pousse """
     P = Plateau_local
     l,c = case #position de la case de pose
     lv,cv = coord_vide #position de la case coord_vide
@@ -96,7 +96,7 @@ def pousse(Plateau_local, joueur, coord_vide, case):
         else :
             for k in range (cv,n-1):
                 P[l,k]=P[l,k+1]
-    elif c == cv: #peut etre remplacer par else
+    elif c == cv: #peut être remplacé par else
         if l < lv:
             for k in range (lv,0,-1):
                 P[k,c]=P[k-1,c]
