@@ -1,4 +1,8 @@
 """"PROGRAMMATION DU JEU QUIXO"""
+"""Pour jouer, lancer le programme en appuyant sur "Ctrl E" 
+règle du jeu : sélectionner un pion sur la périphérie du plateau puis reposer le de sorte que le trou soit comblé en poussant une ligne de cubes
+But du jeu : aligner n de ses symboles (n : dimension du plateau)
+Jouer avec les IA : Pour faire jouer une IA appuyer sur la touche du clavier indiquée sur le bord gauche du plateau"""
 
 ##Importations
 import numpy as np
