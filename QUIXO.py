@@ -433,6 +433,7 @@ plt.show(block=False) #evite les bugs
 
 
 ##Graphiques
+"""Pour tracer un graphique, appeller la fontion correspondante"""
 
 #comparaison des IA
 
