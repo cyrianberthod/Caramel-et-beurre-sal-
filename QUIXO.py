@@ -531,14 +531,12 @@ L_prof_3=[27.981194257736206,24.32934021949768,23.035787343978882,20.62333679199
 L_prof_4=[200] #bcp plus de 200s en réalité, l'ordinateur n'achève pas le calcul 
 
 def affichage_temps_prof_avec_sans_elagage():
-    """Comparaison du temps de calcul avec ou sans élagage , selon la profondeur"""
+    """Comparaison du temps de calcul avec ou sans élagage , selon la profondeur entrée en argument de minimax()"""
     X=np.linspace(1,4,4)
     Y1=[np.mean(L_prof_1_elagage),np.mean(L_prof_2_elagage),np.mean(L_prof_3_elagage),np.mean(L_prof_4_elagage)]
     Y2=[np.mean(L_prof_1),np.mean(L_prof_2),np.mean(L_prof_3),np.mean(L_prof_4)]
-    plt.plot(X,Y1, label="t=f(prof) avec elagage")
-    plt.plot(X,Y2, label="t=f(prof) sans elagage")
-    plt.plot(X,Y1,"x")
-    plt.plot(X,Y2,"x")
+    plt.plot(X,Y1, label="t=f(profondeur) avec elagage")
+    plt.plot(X,Y2, label="t=f(profondeur) sans elagage")
     plt.xlabel("profondeur de calcul")
     plt.ylabel("temps que met l'IA pour jouer (s)")
     plt.legend()
