@@ -362,7 +362,6 @@ def clic(event):
 
         #Phase de capture
         if np.any(testvide)==0: #la matrice est égale à la matrice nulle (n'importe quel élément de testvide est nul)
-            print('capture')
             capture_cube(Plateau,joueur,case)
             refresh()
 
@@ -371,7 +370,6 @@ def clic(event):
         else: #le cube à été capturé
             if pousseok(coord_vide,case):
                 pousse(Plateau,joueur,coord_vide,case)
-                print('pose')
                 refresh()
 
                 if partie_finie(Plateau,joueur) != False: #si la partie est terminée
@@ -398,7 +396,7 @@ def clicIA(event): #pour jouer avec une IA
 
     elif event.key == 'b':
             modeIA = 2
-
+            
     if modeIA!=0:
             deb=time.time()
             ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
@@ -407,7 +405,6 @@ def clicIA(event): #pour jouer avec une IA
             pousse(Plateau,joueur,coord_vide,case)
             refresh()
             fin=time.time()
-            print(fin-deb)
             joueur = chg_joueur(joueur)
 
     elif event.key == 'c':
@@ -546,5 +543,4 @@ def temps_prof_avec_sans_elagage():
     plt.ylabel("temps que met l'IA pour jouer (s)")
     plt.legend()
     plt.show()
-
 
