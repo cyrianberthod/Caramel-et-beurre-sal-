@@ -506,4 +506,27 @@ def temps_prof_avec_sans_elagage():
     plt.ylabel("temps que met l'IA pour jouer (s)")
     plt.legend()
     plt.show()
+    
+    def temps_en_fonction_de_la_dimension():
+    global n 
+    global coord_bordure
+    global joueur
+    global Plateau
+    modeIA=1
+    profondeur=3
+    T=[]
+    for dim in range(3,20):
+        n=dim
+        Plateau=np.zeros((n,n))
+        debut=time.time()
+        ((coord_vide,case) , poids) = (minimax(Plateau, profondeur, -1000000000, 1000000000, joueur, modeIA)[k] for k in range(2))
+        capture_cube(coord_vide, Plateau, joueur)
+        pousse(coord_vide,case,Plateau,joueur)   
+        fin=time.time() 
+        T.append(fin-debut)
+    X=[k for k in range(3,20)]
+    plt.scatter(X, T, marker="+")
+    plt.xlabel("dimension du plateau")
+    plt.ylabel("temps que met l'IA pour jouer (s)")
+    plt.show()
 
