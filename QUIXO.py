@@ -436,25 +436,25 @@ plt.show(block=False) #évite les bugs
 
 #comparaison des IA
 
-def simulIA(IA1, IA2):#Pour que la fonction trace le graphique il faut commenter toute la partie interface graphique 
+def simulIA(IA1, IA2):
     """Prend en entrée le mode de 2 IA et affiche les fréquences de victoires de chacune"""
     global joueur
     global Plateau
-    Plateau=np.zeros((n,n))
     joueur = 1
     modeIA = IA1
-    nbcoup=0
     nbparties=0
-    
-    fIA1= 0
-    fIA2= 0
-    feg= 0
-    
-    for c in capture_possible(Plateau, 1): #on test tous les 1er coups possibles différents
+    vIA1= 0
+    vIA2= 0
+    eg= 0
+    Plateau_initial = np.zeros((n,n))
+    for c in capture_possible(Plateau_initial, 1): #on test tous les 1er coups possibles différents
         for p in poussepossible(c) :
+            Plateau=np.zeros((n,n))
             capture_cube(Plateau, 1, c)
             pousse(Plateau, 1, c, p)
             nbparties+=1
+            print(nbparties)
+            nbcoup=0
             while not partie_finie(Plateau,joueur) and nbcoup<100:
                 ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
                 capture_cube(Plateau, joueur,coord_vide)
@@ -467,16 +467,16 @@ def simulIA(IA1, IA2):#Pour que la fonction trace le graphique il faut commenter
                 nbcoup+=1
 
             if partie_finie(Plateau,joueur)==1:
-                fIA1+=1/nbparties
+                vIA1+=1
             elif partie_finie(Plateau,joueur)==2:
-                fIA2+=1/nbparties
+                vIA2+=1
             else:
-                feg+=1/nbparties
+                eg+=1
 
-
-    plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5, color=["blue","red","grey"])
-    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k") for c in ["blue","red","grey"]]
-    labels= ["IA offensive","IA defensive","égalité"]
+    plt.bar([1,2,3],[vIA1,vIA2,eg]/nbparties ,color = ["blue","red","grey"], width=0.5)
+    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
+    labels= ["IA1","IA2","égualité"]
+    plt.ylabel("fréquence de victoire")
     plt.legend(handles, labels)
     plt.show()
 
