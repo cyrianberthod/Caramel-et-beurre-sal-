@@ -1,8 +1,10 @@
 """"PROGRAMMATION DU JEU QUIXO"""
 """Pour jouer, lancer le programme en appuyant sur "Ctrl E" 
-règle du jeu : sélectionnez un pion sur la périphérie du plateau puis reposez le de sorte que le vide soit comblé en poussant une ligne de cubes
+règle du jeu : sélectionnez un pion sur la périphérie du plateau puis reposez le de sorte que le vide soit comblé en cliquant sur un des cubes d'une extrémité opposée
 But du jeu : aligner n de ses symboles (n : dimension du plateau)
 Jouer avec les IA : Pour faire jouer une IA appuyer sur la touche du clavier indiquée sur le bord gauche du plateau"""
+
+"""Pour tracer un graphique (comparaison des IA, efficacité du programme), appeller la fontion correspondante (voir fin de programme)"""
 
 ##Importations
 import numpy as np
@@ -54,7 +56,7 @@ def set_coord_bordure():
 
 coord_bordure=set_coord_bordure()
 
-#Peut-on effectueur l'action ?
+#Peut-on effectuer l'action ?
 
 def capture_possible(Plateau_local, joueur_local):
     """Prend en argument un plateau et un joueur et renvoie la liste des coordonnées des cubes que le joueur peut capturer"""
@@ -274,7 +276,7 @@ ax.add_patch(fond_plateau)
 bouton_newgame=plt.Rectangle((1,n+0.2),n-2,0.6,fc='black') #bouton new game
 ax.add_patch(bouton_newgame)
 text_newgame=plt.text(n/2,n+0.5,'New Game',fontsize=8,horizontalalignment='center',verticalalignment='center',color='w')
-text_joueur1=plt.text(-2.5,n+0.5,'Consigne',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
+text_consignes=plt.text(-2.5,n+0.5,'Consignes',fontsize=12,horizontalalignment='center',verticalalignment='center',color='black')
 text_IArand=plt.text(-2.5,2*n/3,'IA aleatoire taper c',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
 text_IAoff=plt.text(-2.5,n/2,'IA offensive taper a',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
 text_IAdef=plt.text(-2.5,n/4,'IA defensive taper b',fontsize=8,horizontalalignment='center',verticalalignment='center',color='black')
@@ -351,11 +353,11 @@ def clic(event):
     if 1<x<n-1 and n+0.2<y<n+0.8:
         play()
         refresh()
-        ax.texts=[ax.texts[k] for k in range(5)] #supprime les textes defini apres les 5 initiaux
+        ax.texts=[ax.texts[k] for k in range(5)] #supprime tous les textes sauf ceux nécessaires au début de partie
 
     #Au cours d'une partie
     else:
-        c = int(x-x%1) #passage de la figure à la matrice
+        c = int(x-x%1) #passage de la figure à la matrice (x%1: reste de la division euclidienne par 1 <=> chiffre après la virgule)
         l = int((n-1)-(y-y%1))
         case = (l,c)
         testvide = np.where(Plateau == -1, 1,0) #renvoie une matrice avec des 1 là où il y a des -1 dans le plateau et des 0 sinon
@@ -405,6 +407,7 @@ def clicIA(event): #pour jouer avec une IA
             pousse(Plateau,joueur,coord_vide,case)
             refresh()
             fin=time.time()
+            #print(fin-deb)
             joueur = chg_joueur(joueur)
 
     elif event.key == 'c':
@@ -425,12 +428,11 @@ def clicIA(event): #pour jouer avec une IA
 fig.canvas.mpl_connect('button_press_event', clic)
 fig.canvas.mpl_connect('key_press_event', clicIA)
 plt.interactive(True)
-plt.pause(10000) #evite que la figure se ferme
-plt.show(block=False) #evite les bugs
+plt.pause(10000) #évite que la figure se ferme
+plt.show(block=False) #évite les bugs
 
 
 ##Graphiques
-"""Pour tracer un graphique, appeller la fontion correspondante"""
 
 #comparaison des IA
 
@@ -476,52 +478,11 @@ def simulIA(IA1, IA2):
     labels= ["IA1","IA2","égualité"]
     plt.legend(handles, labels)
     plt.show()
-
-def simulalea(IA, joueur_commencant): #joueur_commancant : 1 pour IA def/of 2 pour IA aléatoire
-    """Prend en entrée une IA offensive ou défensive et si elle joue en 1er ou en 2eme : fait jouer cette IA contre l'IA aléatoire et affiche les fréquences de victoires de chacune"""
-    global joueur
-    global Plateau
-    Plateau=np.zeros((n,n))
-    joueur = joueur_commencant
-    modeIA = IA
-    nbcoup=0
-    nbparties=0
-
-    fIA= 0
-    falea= 0
-    feg= 0
-
-    for c in capture_possible(Plateau, 1): #on test tous les 1er coups possibles différents
-        for p in poussepossible(c) :
-            capture_cube(Plateau, 1, c)
-            pousse(Plateau, 1, c, p)
-            nbparties+=1
-            while not partie_finie(Plateau,joueur) and nbcoup<100:
-                if joueur==1:
-                    ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
-                    capture_cube(Plateau, joueur,coord_vide)
-                    pousse(Plateau,joueur,coord_vide,case)
-                    joueur = chg_joueur(joueur)
-                else:
-                    Plateau =IA_aleatoire(Plateau,joueur)
-                nbcoup+=1
-
-            if partie_finie(Plateau,joueur)==1:
-                fIA+=1
-            elif partie_finie(Plateau,joueur)==2:
-                falea+=1
-            else:
-                feg+=1
-
-    plt.bar([1,2,3],[fIA,falea,feg],width=0.5)
-    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
-    labels= ["IA","aléatoire","égalité"]
-    plt.legend(handles, labels)
-    plt.show()
     
 
 #Efficacité du programme 
 
+#valeur recupérer grâce à la bibliothèque time
 L_prof_1_elagage=[0.032422542572021484,0.03390192985534668,0.03288841247558594,0.03688979148864746,0.05303382873535156,0.0339496135711669,0.03333449363708496,0.03889942169189453,0.03737473487854004,0.0460817813873291,0.04139208793640137,0.04031872749328613,0.048400163650512695,0.04485344886779785,0.044895172119140625,0.04483342170715332,0.0362548828125,0.03539419174194336,0.03601336479187012]
 L_prof_2_elagage=[0.28851318359375,0.2601969242095947,0.26482439041137695,0.23706388473510742,0.2294912338256836,0.24045634269714355,0.18215036392211914,0.19139742851257324,0.19612741470336914,0.2076098918914795,0.16843128204345703,0.1560497283935547,0.14779973030090332,0.14177989959716797,0.13069987297058105,0.15012860298156738,0.15142321586608887,0.13753700256347656,0.14173460006713867,0.11642265319824219]
 L_prof_3_elagage=[4.85296893119812,4.385595798492432,4.158659219741821,3.8172338008880615,3.2782204151153564,3.555518388748169,2.515331506729126,2.6929337978363037,2.744154214859009,2.8351833820343018,2.6712000370025635,2.2165017127990723,2.2029197216033936,1.86653733253479,1.7297430038452148,1.4150440692901611,2.2472991943359375,1.822556495666504,1.2208962440490723,1.453660488128662,1.433415174484253]
