@@ -96,7 +96,9 @@ def temps_calcul2():
                     joueur = chg_joueur(joueur)
                 else:
                     Plateau =IA_aleatoire(Plateau,joueur)
+                    joueur=chg_joueur(joueur)
                 nbcoup+=1
+               
 
             if partie_finie(Plateau,joueur)==1:
                 fIA+=1
