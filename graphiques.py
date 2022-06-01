@@ -68,3 +68,46 @@ def temps_calcul2():
     plt.ylabel("temps que met l'IA pour jouer (s)")
     plt.show()
 
+    
+  def simulalea(IA, joueur_commencant): #joueur_commancant : 1 pour IA def/of 2 pour IA aléatoire
+    """Prend en entrée une IA offensive ou défensive et si elle joue en 1er ou en 2eme : fait jouer cette IA contre l'IA aléatoire et affiche les fréquences de victoires de chacune"""
+    global joueur
+    global Plateau
+    Plateau=np.zeros((n,n))
+    joueur = joueur_commencant
+    modeIA = IA
+    nbcoup=0
+    nbparties=0
+
+    fIA= 0
+    falea= 0
+    feg= 0
+
+    for c in capture_possible(Plateau, 1): #on test tous les 1er coups possibles différents
+        for p in poussepossible(c) :
+            capture_cube(Plateau, 1, c)
+            pousse(Plateau, 1, c, p)
+            nbparties+=1
+            while not partie_finie(Plateau,joueur) and nbcoup<100:
+                if joueur==1:
+                    ((coord_vide,case) , poids) = (minimax(Plateau, joueur, 2, modeIA, -1000000000, 1000000000)[k] for k in range(2))
+                    capture_cube(Plateau, joueur,coord_vide)
+                    pousse(Plateau,joueur,coord_vide,case)
+                    joueur = chg_joueur(joueur)
+                else:
+                    Plateau =IA_aleatoire(Plateau,joueur)
+                nbcoup+=1
+
+            if partie_finie(Plateau,joueur)==1:
+                fIA+=1
+            elif partie_finie(Plateau,joueur)==2:
+                falea+=1
+            else:
+                feg+=1
+
+    plt.bar([1,2,3],[fIA,falea,feg],width=0.5)
+    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
+    labels= ["IA","aléatoire","égalité"]
+    plt.legend(handles, labels)
+    plt.show()
+
