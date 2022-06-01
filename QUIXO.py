@@ -473,11 +473,13 @@ def simulIA(IA1, IA2):#Pour que la fonction trace le graphique il faut commenter
             else:
                 feg+=1/nbparties
 
-    plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5)
-    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
-    labels= ["IA1","IA2","égualité"]
+
+    plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5, color=["blue","red","grey"])
+    handles = [plt.Rectangle((0,0),1,1,color=c,ec="k") for c in ["blue","red","grey"]]
+    labels= ["IA offensive","IA defensive","égalité"]
     plt.legend(handles, labels)
     plt.show()
+
     
 
 #Efficacité du programme 
