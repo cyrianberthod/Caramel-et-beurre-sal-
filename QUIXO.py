@@ -436,7 +436,7 @@ plt.show(block=False) #évite les bugs
 
 #comparaison des IA
 
-def simulIA(IA1, IA2):
+def simulIA(IA1, IA2):#Pour que la fonction trace le graphique il faut commenter toute la partie interface graphique 
     """Prend en entrée le mode de 2 IA et affiche les fréquences de victoires de chacune"""
     global joueur
     global Plateau
@@ -445,11 +445,11 @@ def simulIA(IA1, IA2):
     modeIA = IA1
     nbcoup=0
     nbparties=0
-
+    
     fIA1= 0
     fIA2= 0
     feg= 0
-
+    
     for c in capture_possible(Plateau, 1): #on test tous les 1er coups possibles différents
         for p in poussepossible(c) :
             capture_cube(Plateau, 1, c)
@@ -467,11 +467,11 @@ def simulIA(IA1, IA2):
                 nbcoup+=1
 
             if partie_finie(Plateau,joueur)==1:
-                fIA1+=1
+                fIA1+=1/nbparties
             elif partie_finie(Plateau,joueur)==2:
-                fIA2+=1
+                fIA2+=1/nbparties
             else:
-                feg+=1
+                feg+=1/nbparties
 
     plt.bar([1,2,3],[fIA1,fIA2,feg],width=0.5)
     handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
