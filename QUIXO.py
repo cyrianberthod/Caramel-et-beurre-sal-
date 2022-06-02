@@ -24,14 +24,6 @@ vide=-1
 OFFENSIF=1
 DEFENSIF=2
 
-def chg_joueur(joueur_local):
-    """renvoie l'adversaire du joueur entré en argument"""
-    if joueur_local==croix:
-        joueur_local=rond
-    else:
-        joueur_local=croix
-    return joueur_local
-
 #choix de la taille du plateau
 n=5
 
@@ -44,6 +36,14 @@ def play():
     global joueur
     joueur = rd.randint(croix,rond) #le joueur 1 ou le joueur 2 commence (hasard)
 play()
+
+def chg_joueur(joueur_local):
+    """renvoie l'adversaire du joueur entré en argument"""
+    if joueur_local==croix:
+        joueur_local=rond
+    else:
+        joueur_local=croix
+    return joueur_local
 
 def set_coord_bordure():
     """renvoie la liste des coordonées matricielles de la bordure du plateau"""
