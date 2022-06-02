@@ -473,9 +473,9 @@ def simulIA(IA1, IA2):
             else:
                 eg+=1
 
-    plt.bar([1,2,3],[vIA1,vIA2,eg]/nbparties ,color = ["blue","red","grey"], width=0.5)
+    plt.bar([1,2,3],[vIA1/nbparties,vIA2/nbparties,eg/nbparties] ,color = ["blue","red","grey"], width=0.5)
     handles = [plt.Rectangle((0,0),1,1,color=c,ec="k")for c in ["blue","red","grey"]]
-    labels= ["IA1","IA2","égualité"]
+    labels= ["IA1","IA2","égalité"]
     plt.ylabel("fréquence de victoire")
     plt.legend(handles, labels)
     plt.show()
@@ -507,7 +507,7 @@ def temps_prof_avec_sans_elagage():
     plt.legend()
     plt.show()
     
-    def temps_en_fonction_de_la_dimension():
+def temps_en_fonction_de_la_dimension():
     global n 
     global coord_bordure
     global joueur
